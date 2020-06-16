@@ -4,21 +4,38 @@ plugins {
 	id 'java'
 }
 
-group = 'com.github'
+group = 'com.github.changhee_choi'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+allprojects {
+	repositories {
+		mavenCentral()
 	}
 }
 
-test {
-	useJUnitPlatform()
+subprojects {
+	apply plugin: "java"
+	apply plugin: 'java-library'
+	apply plugin: "org.springframework.boot"
+	apply plugin: "io.spring.dependency-management"
+
+	dependencies {
+		implementation 'com.h2database:h2'
+		compileOnly 'org.projectlombok:lombok:1.18.10'
+		annotationProcessor 'org.projectlombok:lombok:1.18.10'
+		testImplementation('org.springframework.boot:spring-boot-starter-test') {
+			exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+		}
+	}
+
+	test {
+		useJUnitPlatform()
+		systemProperties = System.properties
+		ignoreFailures = true
+	}
+
+	clean {
+		delete 'out' //clean 명령어 실행시 out 디렉토리도 함께 삭제되도록 설정
+	}
 }

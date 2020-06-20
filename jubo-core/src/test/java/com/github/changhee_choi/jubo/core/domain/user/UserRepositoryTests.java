@@ -1,5 +1,7 @@
 package com.github.changhee_choi.jubo.core.domain.user;
 
+import com.github.changhee_choi.jubo.core.domain.role.Role;
+import com.github.changhee_choi.jubo.core.domain.role.RoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -19,14 +21,20 @@ class UserRepositoryTests {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     private User createUserEntity() {
+        Role role = new Role("ROLE_USER");
+        roleRepository.save(role);
+
         User user = User.builder()
                 .name("test_user")
                 .email("test@email.com")
                 .password("password")
                 .build();
 
+        user.addRole(role);
         return userRepository.save(user);
     }
 
@@ -58,8 +66,11 @@ class UserRepositoryTests {
     @Test
     void read() {
         User user = createUserEntity();
-        Optional<User> readUser = userRepository.findById(user.getId());
-        assertThat(readUser.isPresent()).isTrue();
+        Optional<User> optionalReadUser = userRepository.findById(user.getId());
+        assertThat(optionalReadUser.isPresent()).isTrue();
+
+        User readUser = optionalReadUser.get();
+        assertThat(readUser.getRoles().size()).isEqualTo(1);
     }
 
     @Test

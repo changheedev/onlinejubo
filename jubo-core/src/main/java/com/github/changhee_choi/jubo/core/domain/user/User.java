@@ -1,9 +1,12 @@
 package com.github.changhee_choi.jubo.core.domain.user;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
+import com.github.changhee_choi.jubo.core.domain.role.Role;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Changhee Choi
@@ -28,6 +31,12 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @ManyToMany
+    @JoinTable(name = "oj_user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles = new HashSet<>();
 
     @Column(nullable = false)
     private boolean withdraw;
@@ -74,5 +83,9 @@ public class User extends BaseEntity {
 
     public void confirmAccountEmail() {
         this.emailConfirmed = true;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 }

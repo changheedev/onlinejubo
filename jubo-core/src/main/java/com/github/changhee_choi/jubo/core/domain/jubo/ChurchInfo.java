@@ -28,8 +28,10 @@ public class ChurchInfo extends BaseEntity {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
+    @Column(nullable = false, length = 50)
     private String name;
 
+    @Column(nullable = false)
     private int memberNum;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

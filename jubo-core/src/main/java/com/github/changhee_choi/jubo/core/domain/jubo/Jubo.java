@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = {"title", "startDate"}, callSuper = false)
+@ToString(callSuper = true)
 public class Jubo extends BaseEntity {
 
     @Id

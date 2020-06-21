@@ -1,9 +1,7 @@
 package com.github.changhee_choi.jubo.core.domain.jubo;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "oj_jubo")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = {"title", "startDate"}, callSuper = false)
 public class Jubo extends BaseEntity {
 
     @Id
@@ -34,10 +33,17 @@ public class Jubo extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    public Jubo(String title, LocalDateTime startDate) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "church_id", nullable = false)
+    private Church church;
+
+    @Builder
+    public Jubo(String title, LocalDateTime startDate, Church church) {
         this.title = title;
         this.viewCount = 0;
         updateStartDate(startDate);
+        this.church = church;
+        this.church.addJubo(this);
     }
 
     public void updateTitle(String title) {

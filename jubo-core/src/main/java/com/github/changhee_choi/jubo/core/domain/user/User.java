@@ -1,10 +1,9 @@
 package com.github.changhee_choi.jubo.core.domain.user;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
-import com.github.changhee_choi.jubo.core.domain.jubo.ChurchInfo;
+import com.github.changhee_choi.jubo.core.domain.jubo.Church;
 import com.github.changhee_choi.jubo.core.domain.role.Role;
 import lombok.*;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -50,7 +49,7 @@ public class User extends BaseEntity {
     private Set<Role> roles = new HashSet<>();
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private ChurchInfo churchInfo;
+    private Church church;
 
     @Builder
     public User(String name, String email, String password) {
@@ -94,8 +93,8 @@ public class User extends BaseEntity {
         this.roles.add(role);
     }
 
-    public void setChurchInfo(ChurchInfo churchInfo) {
-        if(this.churchInfo != null) throw new IllegalStateException("등록된 교회 정보가 존재합니다.");
-        this.churchInfo = churchInfo;
+    public void setChurch(Church church) {
+        if(this.church != null) throw new IllegalStateException("등록된 교회 정보가 존재합니다.");
+        this.church = church;
     }
 }

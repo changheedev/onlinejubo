@@ -8,5 +8,5 @@ import java.util.UUID;
  * @author Changhee Choi
  * @since 21/06/2020
  */
-public interface ChurchInfoRepository extends JpaRepository<ChurchInfo, UUID> {
+public interface ChurchRepository extends JpaRepository<Church, UUID> {
 }

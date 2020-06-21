@@ -74,10 +74,9 @@ class UserRepositoryTests {
     }
 
     @Test
-    void update() throws Exception {
+    void update() {
         User user = createUserEntity();
 
-        Thread.sleep(2000L);
         user.updateEmail("updated@email.com");
         user.updateName("updated_user");
         user.updatePassword("updatedPassword");

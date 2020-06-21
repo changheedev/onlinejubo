@@ -1,5 +1,7 @@
 package com.github.changhee_choi.jubo.core.domain.jubo;
 
+import com.github.changhee_choi.jubo.core.domain.user.User;
+import com.github.changhee_choi.jubo.core.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +24,18 @@ class ChurchInfoRepositoryTests {
     @Autowired
     private ChurchInfoRepository churchInfoRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private ChurchInfo createChurchInfoEntity() {
-        ChurchInfo churchInfo = new ChurchInfo("test_church", 30);
+        User user = User.builder()
+                .name("test_user")
+                .email("test@email.com")
+                .password("password").build();
+
+        userRepository.save(user);
+
+        ChurchInfo churchInfo = new ChurchInfo("test_church", 30, user);
         return churchInfoRepository.save(churchInfo);
     }
 
@@ -34,6 +46,10 @@ class ChurchInfoRepositoryTests {
         assertThat(churchInfo.getId()).isNotNull();
         assertThat(churchInfo.getId().toString().length()).isEqualTo(36);
         logger.info(churchInfo.getId().toString());
+
+        User user = churchInfo.getUser();
+        assertThat(user).isNotNull();
+        assertThat(user.getChurchInfo()).isNotNull();
 
         assertThat(churchInfo.getName()).isEqualTo("test_church");
         assertThat(churchInfo.getMemberNum()).isEqualTo(30);

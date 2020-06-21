@@ -1,8 +1,10 @@
 package com.github.changhee_choi.jubo.core.domain.user;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
+import com.github.changhee_choi.jubo.core.domain.jubo.ChurchInfo;
 import com.github.changhee_choi.jubo.core.domain.role.Role;
 import lombok.*;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -32,12 +34,6 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
-    @JoinTable(name = "oj_user_role",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> roles = new HashSet<>();
-
     @Column(nullable = false)
     private boolean withdraw;
 
@@ -46,6 +42,15 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private boolean emailConfirmed;
+
+    @ManyToMany
+    @JoinTable(name = "oj_user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles = new HashSet<>();
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private ChurchInfo churchInfo;
 
     @Builder
     public User(String name, String email, String password) {
@@ -87,5 +92,10 @@ public class User extends BaseEntity {
 
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    public void setChurchInfo(ChurchInfo churchInfo) {
+        if(this.churchInfo != null) throw new IllegalStateException("등록된 교회 정보가 존재합니다.");
+        this.churchInfo = churchInfo;
     }
 }

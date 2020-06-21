@@ -32,16 +32,22 @@ public class ChurchInfo extends BaseEntity {
 
     private int memberNum;
 
-    public ChurchInfo(String name, int memberNum) {
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public ChurchInfo(String name, int memberNum, User user) {
         this.name = name;
         this.memberNum = memberNum;
+        this.user = user;
+        this.user.setChurchInfo(this);
     }
 
     public void updateName(String name) {
         this.name = name;
     }
 
-    public void updateMemberNum(int memberNum){
+    public void updateMemberNum(int memberNum) {
         this.memberNum = memberNum;
     }
 }

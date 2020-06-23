@@ -19,20 +19,9 @@ class UserRepositoryTests {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
 
     private User createUserEntity() {
-        Role role = new Role("ROLE_USER");
-        roleRepository.save(role);
-
-        User user = User.builder()
-                .name("test_user")
-                .email("test@email.com")
-                .password("password")
-                .build();
-
-        user.addRole(role);
+        User user = User.builder().name("test_user").email("test@email.com").password("password").build();
         return userRepository.save(user);
     }
 

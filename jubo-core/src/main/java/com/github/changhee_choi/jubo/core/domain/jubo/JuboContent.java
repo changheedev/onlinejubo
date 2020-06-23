@@ -27,6 +27,10 @@ public class JuboContent {
     @Lob
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jubo_id")
+    private Jubo jubo;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "oj_jubo_content_attachment",
             joinColumns = @JoinColumn(name = "content_id", referencedColumnName = "id"),
@@ -44,6 +48,13 @@ public class JuboContent {
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void setJubo(Jubo jubo) {
+        this.jubo = jubo;
+        if (!this.jubo.getContents().contains(this)) {
+            this.jubo.getContents().add(this);
+        }
     }
 
     public void addAttachment(Attachment attachment) {

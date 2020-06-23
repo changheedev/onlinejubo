@@ -5,6 +5,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Changhee Choi
@@ -37,6 +39,9 @@ public class Jubo extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "church_id", nullable = false)
     private Church church;
+
+    @OneToMany(mappedBy = "jubo", cascade = CascadeType.ALL)
+    private List<JuboContent> contents = new ArrayList<>();
 
     @Builder
     public Jubo(String title, LocalDateTime startDate, Church church) {

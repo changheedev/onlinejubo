@@ -1,10 +1,7 @@
 package com.github.changhee_choi.jubo.core.domain.attachment;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,6 +15,7 @@ import java.util.UUID;
 @Table(name = "oj_attachment")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(callSuper = true)
 public class Attachment extends BaseEntity {
 
     @Id

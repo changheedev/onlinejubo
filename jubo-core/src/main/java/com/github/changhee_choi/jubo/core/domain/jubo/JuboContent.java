@@ -1,8 +1,11 @@
 package com.github.changhee_choi.jubo.core.domain.jubo;
 
+import com.github.changhee_choi.jubo.core.domain.attachment.Attachment;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Changhee Choi
@@ -24,6 +27,12 @@ public class JuboContent {
     @Lob
     private String content;
 
+    @OneToMany(mappedBy = "juboContent")
+    @JoinTable(name = "oj_jubo_content_attachment",
+            joinColumns = @JoinColumn(name = "content_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "attachment_id", referencedColumnName = "id"))
+    private Set<Attachment> attachments = new HashSet<>();
+
     public JuboContent(String title, String content) {
         this.title = title;
         this.content = content;
@@ -35,5 +44,9 @@ public class JuboContent {
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void addAttachment(Attachment attachment) {
+        this.attachments.add(attachment);
     }
 }

@@ -32,7 +32,7 @@ public class JuboContent {
     @JoinColumn(name = "jubo_id")
     private Jubo jubo;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "oj_jubo_content_attachment",
             joinColumns = @JoinColumn(name = "content_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "attachment_id", referencedColumnName = "id"))

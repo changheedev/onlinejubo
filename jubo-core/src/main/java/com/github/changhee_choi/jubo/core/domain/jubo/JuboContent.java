@@ -27,7 +27,7 @@ public class JuboContent {
     @Lob
     private String content;
 
-    @OneToMany(mappedBy = "juboContent")
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "oj_jubo_content_attachment",
             joinColumns = @JoinColumn(name = "content_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "attachment_id", referencedColumnName = "id"))

@@ -1,7 +1,5 @@
 package com.github.changhee_choi.jubo.core.domain.user;
 
-import com.github.changhee_choi.jubo.core.domain.role.Role;
-import com.github.changhee_choi.jubo.core.domain.role.RoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

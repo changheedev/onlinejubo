@@ -1,4 +1,4 @@
-package com.github.changhee_choi.jubo.core.domain.role;
+package com.github.changhee_choi.jubo.core.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

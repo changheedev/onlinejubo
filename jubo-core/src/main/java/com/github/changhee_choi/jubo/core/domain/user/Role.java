@@ -1,4 +1,4 @@
-package com.github.changhee_choi.jubo.core.domain.role;
+package com.github.changhee_choi.jubo.core.domain.user;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
 import lombok.AccessLevel;

@@ -1,7 +1,5 @@
 package com.github.changhee_choi.jubo.core.domain.jubo;
 
-import com.github.changhee_choi.jubo.core.domain.user.User;
-import com.github.changhee_choi.jubo.core.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,23 +20,11 @@ class JuboRepositoryTests {
     @Autowired
     private JuboRepository juboRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ChurchRepository churchRepository;
-
     private Jubo createJuboEntity() {
-        User user = User.builder().name("test_user").email("test@email.com").password("password").build();
-        userRepository.save(user);
-        Church church = Church.builder().name("test_church").memberNum(30).build();
-        churchRepository.save(church);
-
         Jubo jubo = Jubo.builder()
                 .title("2020-06-21일 주보")
                 .startDate(LocalDateTime.of(2020, 6, 21, 0, 0))
-                .church(church).build();
-
+                .build();
         return juboRepository.save(jubo);
     }
 
@@ -57,8 +43,6 @@ class JuboRepositoryTests {
         assertThat(jubo.getLastModifiedBy()).isEqualTo("testUser(test@email.com)");
         assertThat(jubo.getCreatedDate()).isNotNull();
         assertThat(jubo.getLastModifiedDate()).isNotNull();
-
-        assertThat(jubo.getChurch().getJuboList().contains(jubo)).isTrue();
     }
 
     @Test

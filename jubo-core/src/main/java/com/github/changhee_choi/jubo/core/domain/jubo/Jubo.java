@@ -37,19 +37,17 @@ public class Jubo extends BaseEntity {
     private LocalDateTime endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "church_id", nullable = false)
+    @JoinColumn(name = "church_id")
     private Church church;
 
-    @OneToMany(mappedBy = "jubo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "jubo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JuboContent> contents = new ArrayList<>();
 
     @Builder
-    public Jubo(String title, LocalDateTime startDate, Church church) {
+    public Jubo(String title, LocalDateTime startDate) {
         this.title = title;
         this.viewCount = 0;
         updateStartDate(startDate);
-        this.church = church;
-        this.church.addJubo(this);
     }
 
     public void updateTitle(String title) {
@@ -59,5 +57,12 @@ public class Jubo extends BaseEntity {
     public void updateStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
         this.endDate = startDate.plusDays(6);
+    }
+
+    public void setChurch(Church church) {
+        this.church = church;
+        if (!this.church.getJuboList().contains(this)) {
+            this.church.getJuboList().add(this);
+        }
     }
 }

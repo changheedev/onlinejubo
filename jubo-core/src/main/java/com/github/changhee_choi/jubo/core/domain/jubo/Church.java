@@ -32,7 +32,7 @@ public class Church extends BaseEntity {
     @Column(nullable = false)
     private int memberNum;
 
-    @OneToMany(mappedBy = "church", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "church", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Jubo> juboList = new ArrayList<>();
 
     @Builder
@@ -47,11 +47,5 @@ public class Church extends BaseEntity {
 
     public void updateMemberNum(int memberNum) {
         this.memberNum = memberNum;
-    }
-
-    public void addJubo(Jubo jubo) {
-        if (!this.juboList.contains(jubo)) {
-            this.juboList.add(jubo);
-        }
     }
 }

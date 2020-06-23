@@ -1,12 +1,13 @@
 package com.github.changhee_choi.jubo.core.domain.jubo;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
-import com.github.changhee_choi.jubo.core.domain.user.User;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Changhee Choi
@@ -31,19 +32,13 @@ public class Church extends BaseEntity {
     @Column(nullable = false)
     private int memberNum;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @OneToMany(mappedBy = "church", cascade = CascadeType.ALL)
     private List<Jubo> juboList = new ArrayList<>();
 
     @Builder
-    public Church(String name, int memberNum, User user) {
+    public Church(String name, int memberNum) {
         this.name = name;
         this.memberNum = memberNum;
-        this.user = user;
-        this.user.setChurch(this);
     }
 
     public void updateName(String name) {

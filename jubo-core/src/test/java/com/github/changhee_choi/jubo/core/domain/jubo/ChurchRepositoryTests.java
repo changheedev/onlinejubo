@@ -1,10 +1,6 @@
 package com.github.changhee_choi.jubo.core.domain.jubo;
 
-import com.github.changhee_choi.jubo.core.domain.user.User;
-import com.github.changhee_choi.jubo.core.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -18,19 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @DataJpaTest
 class ChurchRepositoryTests {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private ChurchRepository churchRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     private Church createChurchEntity() {
-        User user = User.builder().name("test_user").email("test@email.com").password("password").build();
-        userRepository.save(user);
-        Church church = Church.builder().name("test_church").memberNum(30).user(user).build();
+        Church church = Church.builder().name("test_church").memberNum(30).build();
         return churchRepository.save(church);
     }
 
@@ -40,11 +28,7 @@ class ChurchRepositoryTests {
 
         assertThat(church.getId()).isNotNull();
         assertThat(church.getId().toString().length()).isEqualTo(36);
-        logger.info(church.getId().toString());
-
-        User user = church.getUser();
-        assertThat(user).isNotNull();
-        assertThat(user.getChurch()).isNotNull();
+        System.out.println(church.getId());
 
         assertThat(church.getName()).isEqualTo("test_church");
         assertThat(church.getMemberNum()).isEqualTo(30);

@@ -48,7 +48,8 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "church_id")
     private Church church;
 
     @Builder
@@ -94,7 +95,7 @@ public class User extends BaseEntity {
     }
 
     public void setChurch(Church church) {
-        if(this.church != null) throw new IllegalStateException("등록된 교회 정보가 존재합니다.");
+        if (this.church != null) throw new IllegalStateException("등록된 교회 정보가 존재합니다.");
         this.church = church;
     }
 }

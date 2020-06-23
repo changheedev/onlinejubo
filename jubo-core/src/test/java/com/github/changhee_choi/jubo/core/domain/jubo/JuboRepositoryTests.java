@@ -31,7 +31,7 @@ class JuboRepositoryTests {
     private Jubo createJuboEntity() {
         User user = User.builder().name("test_user").email("test@email.com").password("password").build();
         userRepository.save(user);
-        Church church = Church.builder().name("test_church").memberNum(30).user(user).build();
+        Church church = Church.builder().name("test_church").memberNum(30).build();
         churchRepository.save(church);
 
         Jubo jubo = Jubo.builder()

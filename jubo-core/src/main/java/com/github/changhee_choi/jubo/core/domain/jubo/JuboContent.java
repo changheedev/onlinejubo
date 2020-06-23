@@ -15,7 +15,8 @@ import java.util.Set;
 @Table(name = "oj_jubo_content")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
+@EqualsAndHashCode(exclude = {"jubo", "attachments"})
+@ToString(exclude = "jubo")
 public class JuboContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

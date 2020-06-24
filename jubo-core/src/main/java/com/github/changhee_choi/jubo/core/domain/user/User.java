@@ -41,6 +41,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private boolean emailConfirmed;
 
+    @Column(nullable = false)
+    private boolean serviceApproved;
+
     @ManyToMany
     @JoinTable(name = "oj_user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -52,10 +55,11 @@ public class User extends BaseEntity {
     private Church church;
 
     @Builder
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, boolean serviceApproved) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.serviceApproved = serviceApproved;
         this.withdraw = false;
         this.accountLocked = false;
         this.emailConfirmed = false;
@@ -96,5 +100,9 @@ public class User extends BaseEntity {
     public void setChurch(Church church) {
         if (this.church != null) throw new IllegalStateException("등록된 교회 정보가 존재합니다.");
         this.church = church;
+    }
+
+    public void approveService() {
+        this.serviceApproved = true;
     }
 }

@@ -21,7 +21,8 @@ class UserRepositoryTests {
     private UserRepository userRepository;
 
     private User createUserEntity() {
-        User user = User.builder().name("test_user").email("test@email.com").password("password").build();
+        User user = User.builder().name("test_user").email("test@email.com").password("password")
+                .serviceApproved(false).build();
         return userRepository.save(user);
     }
 
@@ -36,6 +37,7 @@ class UserRepositoryTests {
         assertThat(user.isAccountLocked()).isFalse();
         assertThat(user.isEmailConfirmed()).isFalse();
         assertThat(user.isWithdraw()).isFalse();
+        assertThat(user.isServiceApproved()).isFalse();
         assertThat(user.getCreatedBy()).isEqualTo("testUser(test@email.com)");
         assertThat(user.getLastModifiedBy()).isEqualTo("testUser(test@email.com)");
         assertThat(user.getCreatedDate()).isNotNull();
@@ -55,9 +57,6 @@ class UserRepositoryTests {
         User user = createUserEntity();
         Optional<User> optionalReadUser = userRepository.findById(user.getId());
         assertThat(optionalReadUser.isPresent()).isTrue();
-
-        User readUser = optionalReadUser.get();
-        assertThat(readUser.getRoles().size()).isEqualTo(1);
     }
 
     @Test
@@ -70,6 +69,7 @@ class UserRepositoryTests {
         user.lockAccount();
         user.withdrawAccount();
         user.confirmAccountEmail();
+        user.approveService();
 
         User updatedUser = userRepository.save(user);
         userRepository.flush();
@@ -80,6 +80,7 @@ class UserRepositoryTests {
         assertThat(updatedUser.isAccountLocked()).isTrue();
         assertThat(updatedUser.isWithdraw()).isTrue();
         assertThat(updatedUser.isEmailConfirmed()).isTrue();
+        assertThat(updatedUser.isServiceApproved()).isTrue();
         assertThat(updatedUser.getLastModifiedDate()).isNotEqualTo(updatedUser.getCreatedDate());
     }
 

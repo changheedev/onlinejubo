@@ -1,9 +1,9 @@
 package com.github.changhee_choi.jubo.manager.model.web;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -14,12 +14,22 @@ import javax.validation.constraints.Pattern;
 @Builder
 public class SignUpRequest {
 
+    @NotNull
     @Pattern(regexp = "^[a-zA-Z가-힣0-9-_]{2,20}$")
     private String name;
 
-    @Email
+    @NotNull
+    @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
     private String email;
 
+    @NotNull
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,20}$")
     private String password;
+
+    @NotNull
+    @Pattern(regexp = "^[a-zA-Z가-힣\\ ]{2,50}$")
+    private String churchName;
+
+    @NotNull
+    private Integer churchMemberNum;
 }

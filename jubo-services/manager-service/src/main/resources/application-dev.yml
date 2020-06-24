@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    platform: dev
+    url: jdbc:mariadb://localhost:3406/db_dev?useSSL=false&serverTimezone=Asia/Seoul
+    username: dbm_dev
+    password: password
+    driver-class-name: org.mariadb.jdbc.Driver
+    initialization-mode: always
+
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true

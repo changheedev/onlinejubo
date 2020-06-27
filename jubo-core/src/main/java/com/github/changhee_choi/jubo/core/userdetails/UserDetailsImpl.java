@@ -1,6 +1,8 @@
-package com.github.changhee_choi.jubo.core.domain.user;
+package com.github.changhee_choi.jubo.core.userdetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.changhee_choi.jubo.core.domain.user.Role;
+import com.github.changhee_choi.jubo.core.domain.user.User;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
-public class UserDetailsImpl implements UserDetails {
+public abstract class UserDetailsImpl implements UserDetails {
 
     private Long id;
 
@@ -46,7 +48,7 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(User user) {
+    protected UserDetailsImpl(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
         this.name = user.getName();

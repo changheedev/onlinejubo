@@ -1,4 +1,4 @@
-package com.github.changhee_choi.jubo.core.domain.jubo;
+package com.github.changhee_choi.jubo.core.domain.church;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,5 +1,7 @@
 package com.github.changhee_choi.jubo.core.domain.jubo;
 
+import com.github.changhee_choi.jubo.core.domain.church.Church;
+import com.github.changhee_choi.jubo.core.domain.church.ChurchRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

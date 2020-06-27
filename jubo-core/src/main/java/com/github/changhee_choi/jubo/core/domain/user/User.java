@@ -1,7 +1,6 @@
 package com.github.changhee_choi.jubo.core.domain.user;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
-import com.github.changhee_choi.jubo.core.domain.jubo.Church;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +16,9 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public class User extends BaseEntity {
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
+public abstract class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,25 +42,16 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private boolean emailConfirmed;
 
-    @Column(nullable = false)
-    private boolean serviceApproved;
-
     @ManyToMany
     @JoinTable(name = "oj_user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "church_id")
-    private Church church;
-
-    @Builder
-    public User(String name, String email, String password, boolean serviceApproved) {
+    protected User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.serviceApproved = serviceApproved;
         this.withdraw = false;
         this.accountLocked = false;
         this.emailConfirmed = false;
@@ -95,14 +87,5 @@ public class User extends BaseEntity {
 
     public void addRole(Role role) {
         this.roles.add(role);
-    }
-
-    public void setChurch(Church church) {
-        if (this.church != null) throw new IllegalStateException("등록된 교회 정보가 존재합니다.");
-        this.church = church;
-    }
-
-    public void approveService() {
-        this.serviceApproved = true;
     }
 }

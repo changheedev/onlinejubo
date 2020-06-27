@@ -1,6 +1,7 @@
 package com.github.changhee_choi.jubo.core.domain.jubo;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
+import com.github.changhee_choi.jubo.core.domain.church.Church;
 import lombok.*;
 
 import javax.persistence.*;

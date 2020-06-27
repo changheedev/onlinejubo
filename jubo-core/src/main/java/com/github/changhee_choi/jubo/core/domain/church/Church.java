@@ -1,6 +1,8 @@
-package com.github.changhee_choi.jubo.core.domain.jubo;
+package com.github.changhee_choi.jubo.core.domain.church;
 
 import com.github.changhee_choi.jubo.core.domain.BaseEntity;
+import com.github.changhee_choi.jubo.core.domain.jubo.Jubo;
+import com.github.changhee_choi.jubo.core.dto.ChurchDTO;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -47,5 +49,9 @@ public class Church extends BaseEntity {
 
     public void updateMemberNum(int memberNum) {
         this.memberNum = memberNum;
+    }
+
+    public ChurchDTO toDTO() {
+        return ChurchDTO.builder().id(this.id).name(this.name).memberNum(this.memberNum).build();
     }
 }

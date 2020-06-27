@@ -2,7 +2,7 @@ package com.github.changhee_choi.jubo.manager.controller;
 
 import com.github.changhee_choi.jubo.manager.model.web.SignUpRequest;
 import com.github.changhee_choi.jubo.manager.service.DuplicateEmailException;
-import com.github.changhee_choi.jubo.manager.service.UserService;
+import com.github.changhee_choi.jubo.manager.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +19,9 @@ import javax.validation.ValidationException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserController {
+public class AccountServiceController {
 
-    private final UserService userService;
+    private final AccountService accountService;
 
     @PostMapping("")
     public ResponseEntity<UserDetails> signUp(@Valid @RequestBody SignUpRequest request, BindingResult bindingResult) {
@@ -30,7 +30,7 @@ public class UserController {
             throw new ValidationException("회원가입 요청 데이터가 올바르지 않습니다.");
         }
 
-        UserDetails userDetails = userService.signUp(request);
+        UserDetails userDetails = accountService.signUp(request);
         return ResponseEntity.ok(userDetails);
     }
 

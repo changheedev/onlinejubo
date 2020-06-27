@@ -36,8 +36,6 @@ public class UserDetailsImpl implements UserDetails {
 
     private boolean emailConfirmed;
 
-    private boolean serviceApproved;
-
     private LocalDateTime createdDate;
 
     private String createdBy;
@@ -56,7 +54,6 @@ public class UserDetailsImpl implements UserDetails {
         this.accountLocked = user.isAccountLocked();
         this.withdraw = user.isWithdraw();
         this.emailConfirmed = user.isEmailConfirmed();
-        this.serviceApproved = user.isServiceApproved();
         this.authorities = user.getRoles().stream()
                 .map(Role::getName)
                 .map(SimpleGrantedAuthority::new)

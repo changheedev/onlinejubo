@@ -11,4 +11,5 @@ dependencies {
     api 'org.springframework.data:spring-data-envers'
     api 'org.springframework.boot:spring-boot-starter-security'
     api 'org.springframework.boot:spring-boot-starter-web'
+    api 'io.jsonwebtoken:jjwt:0.9.1'
 }

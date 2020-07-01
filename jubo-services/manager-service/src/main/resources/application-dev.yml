@@ -16,7 +16,9 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
-
+logging:
+  level:
+    com.github.changhee_choi.*: debug
 jwt:
   secretKey: secretKey
   expirationSeconds: 3600

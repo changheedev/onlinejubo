@@ -6,7 +6,11 @@ import com.github.changhee_choi.jubo.core.util.JwtUtil;
 import com.github.changhee_choi.jubo.manager.model.web.AuthenticationRequest;
 import com.github.changhee_choi.jubo.manager.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationController {
 
     private final JwtUtil jwtUtil;
@@ -39,5 +44,11 @@ public class AuthenticationController {
         response.addCookie(cookie);
 
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(value = {AuthenticationException.class})
+    public ResponseEntity authenticationExceptionHandler(Exception e) {
+        log.debug("로그인 실패 - {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

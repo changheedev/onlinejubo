@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -53,6 +52,34 @@ class AuthenticationControllerTests {
                 .andReturn();
 
         assertThat(result.getResponse().getCookie("ACCESS_TOKEN")).isNotNull();
+    }
 
+    @Test
+    void 가입되지_않은_이메일로_로그인을_요청하는_경우_UNAUTHORIZED_상태로_응답된다() throws Exception {
+        AuthenticationRequest request = new AuthenticationRequest("test1@email.com", "password1");
+
+        mvc.perform(post("/authorize")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
+    void 틀린_비밀번호로_로그인을_요청하는_경우_UNAUTHORIZED_상태로_응답된다() throws Exception {
+        SignUpRequest signUpRequest = SignUpRequest.builder()
+                .name("TestUser").email("test1@email.com").password("password1")
+                .churchName("My Church").churchMemberNum(10).build();
+        accountService.signUp(signUpRequest);
+
+        AuthenticationRequest request = new AuthenticationRequest("test1@email.com", "password12");
+
+        mvc.perform(post("/authorize")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andReturn();
     }
 }

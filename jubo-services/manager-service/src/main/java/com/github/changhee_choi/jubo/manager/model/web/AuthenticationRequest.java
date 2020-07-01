@@ -3,6 +3,7 @@ package com.github.changhee_choi.jubo.manager.model.web;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Changhee Choi
@@ -10,6 +11,7 @@ import lombok.Data;
  */
 @Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationRequest {
     private String username;

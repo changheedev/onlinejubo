@@ -42,4 +42,8 @@ public class JwtUtil {
             throw new AccessDeniedException(String.format("유효하지 않은 토큰으로 접근이 시도되었습니다 [%s]", token));
         }
     }
+
+    public Long getExpirationSeconds() {
+        return expirationSeconds;
+    }
 }

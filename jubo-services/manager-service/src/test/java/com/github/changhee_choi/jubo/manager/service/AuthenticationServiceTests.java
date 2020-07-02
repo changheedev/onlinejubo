@@ -8,6 +8,7 @@ import com.github.changhee_choi.jubo.core.domain.user.UserRepository;
 import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
 import com.github.changhee_choi.jubo.manager.model.web.AuthenticationRequest;
 import com.github.changhee_choi.jubo.manager.model.web.SignUpRequest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -36,6 +39,14 @@ class AuthenticationServiceTests {
     private UserRepository userRepository;
     @Autowired
     private ChurchRepository churchRepository;
+
+    @AfterEach
+    public void teardown() {
+        Optional<User> optionalUser = userRepository.findByEmail("test@email.com");
+        if(optionalUser.isPresent()) {
+            userRepository.delete(optionalUser.get());
+        }
+    }
 
     @Test
     void authenticate() {
@@ -60,7 +71,7 @@ class AuthenticationServiceTests {
         Church church = Church.builder().name("My Church").memberNum(20).build();
         churchRepository.save(church);
 
-        User user = ChurchManager.builder().name("test_user").email("test2@email.com")
+        User user = ChurchManager.builder().name("TestUser").email("test@email.com")
                 .password(passwordEncoder.encode("password")).church(church).build();
 
         //account lock
@@ -79,7 +90,7 @@ class AuthenticationServiceTests {
     @Test
     void authenticate를_실행할때_Password가_일치하지_않으면_BadCredentialsException이_던져진다() {
         SignUpRequest request = SignUpRequest.builder()
-                .email("test3@email.com").password("password").name("TestUser")
+                .email("test@email.com").password("password").name("TestUser")
                 .churchName("My Church").churchMemberNum(20).build();
 
         accountService.signUp(request);

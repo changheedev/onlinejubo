@@ -1,14 +1,19 @@
 package com.github.changhee_choi.jubo.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.changhee_choi.jubo.core.domain.user.User;
+import com.github.changhee_choi.jubo.core.domain.user.UserRepository;
 import com.github.changhee_choi.jubo.manager.model.web.SignUpRequest;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,10 +33,21 @@ class AccountServiceControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @AfterEach
+    public void teardown() {
+        Optional<User> optionalUser = userRepository.findByEmail("test@email.com");
+        if(optionalUser.isPresent()) {
+            userRepository.delete(optionalUser.get());
+        }
+    }
+
     @Test
     void signUp() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
-                .name("testUser_1")
+                .name("testUser")
                 .email("test@email.com")
                 .password("pwd1!@#$%^&*()-_+=")
                 .churchName("My Church")
@@ -48,8 +64,8 @@ class AccountServiceControllerTests {
     @Test
     void 중복된_이메일로_회원가입이_요청된_경우_UnprocessableEntity_상태로_응답된다() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
-                .name("testUser_1")
-                .email("test1@email.com")
+                .name("testUser")
+                .email("test@email.com")
                 .password("pwd1!@#$%^&*()-_+=")
                 .churchName("My Church")
                 .churchMemberNum(20)
@@ -259,7 +275,7 @@ class AccountServiceControllerTests {
     @Test
     void 회원가입시_교회이름이_MIN_SIZE_보다_짧은_경우_BadRequest_상태로_응답된다() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
-                .name("testUser_1")
+                .name("testUser")
                 .email("test@email.com")
                 .password("pwd1!@#$%^&*()-_+=")
                 .churchName("a")
@@ -276,7 +292,7 @@ class AccountServiceControllerTests {
     @Test
     void 회원가입시_교회이름이_MAX_SIZE_보다_짧은_경우_BadRequest_상태로_응답된다() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
-                .name("testUser_1")
+                .name("testUser")
                 .email("test@email.com")
                 .password("pwd1!@#$%^&*()-_+=")
                 .churchName(RandomString.make(51)) //max size: 50
@@ -293,7 +309,7 @@ class AccountServiceControllerTests {
     @Test
     void 회원가입시_교회이름에_알파벳과_한글을_제외한_문자가_사용된_경우_BadRequest_상태로_응답된다() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
-                .name("testUser_1")
+                .name("testUser")
                 .email("test@email.com")
                 .password("pwd1!@#$%^&*()-_+=")
                 .churchName("My Church1")
@@ -310,7 +326,7 @@ class AccountServiceControllerTests {
     @Test
     void 회원가입시_교회이름이_Null인_경우_BadRequest_상태로_응답된다() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
-                .name("testUser_1")
+                .name("testUser")
                 .email("test@email.com")
                 .password("pwd1!@#$%^&*()-_+=")
                 .churchName(null)
@@ -327,7 +343,7 @@ class AccountServiceControllerTests {
     @Test
     void 회원가입시_교회인원수가_Null인_경우_BadRequest_상태로_응답된다() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
-                .name("testUser_1")
+                .name("testUser")
                 .email("test@email.com")
                 .password("pwd1!@#$%^&*()-_+=")
                 .churchName("My Church")

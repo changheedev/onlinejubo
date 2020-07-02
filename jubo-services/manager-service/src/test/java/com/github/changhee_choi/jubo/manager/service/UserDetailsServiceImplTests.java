@@ -5,11 +5,14 @@ import com.github.changhee_choi.jubo.core.domain.user.UserRepository;
 import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
 import com.github.changhee_choi.jubo.manager.domain.test.TestUserType;
 import com.github.changhee_choi.jubo.manager.model.web.SignUpRequest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -27,6 +30,14 @@ class UserDetailsServiceImplTests {
     private UserDetailsServiceImpl userDetailsService;
     @Autowired
     private UserRepository userRepository;
+
+    @AfterEach
+    public void teardown() {
+        Optional<User> optionalUser = userRepository.findByEmail("test@email.com");
+        if(optionalUser.isPresent()) {
+            userRepository.delete(optionalUser.get());
+        }
+    }
 
     @Test
     void loadByUsername() {
@@ -52,7 +63,7 @@ class UserDetailsServiceImplTests {
 
     @Test
     void loadByUsername에서_유저_타입이_ChurchManager_가_아닐때_UsernameNotFoundException이_던져진다() {
-        User user = new TestUserType("TestUser", "test2@email.com", "password", "testProp");
+        User user = new TestUserType("TestUser", "test@email.com", "password", "testProp");
         userRepository.save(user);
 
         assertThatThrownBy(() -> userDetailsService.loadUserByUsername(user.getEmail()))

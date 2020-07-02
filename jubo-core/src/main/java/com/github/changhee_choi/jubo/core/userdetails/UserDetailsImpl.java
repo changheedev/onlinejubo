@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @EqualsAndHashCode
 @ToString
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class UserDetailsImpl implements UserDetails {
 
     private Long id;
@@ -31,13 +31,6 @@ public abstract class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
-    @Getter(AccessLevel.NONE)
-    private boolean accountLocked;
-
-    private boolean withdraw;
-
-    private boolean emailConfirmed;
-
     private LocalDateTime createdDate;
 
     private String createdBy;
@@ -48,14 +41,17 @@ public abstract class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
+    private boolean accountNonLocked;
+
+    private boolean withdraw;
+
+    private boolean emailConfirmed;
+
     protected UserDetailsImpl(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
         this.name = user.getName();
         this.password = user.getPassword();
-        this.accountLocked = user.isAccountLocked();
-        this.withdraw = user.isWithdraw();
-        this.emailConfirmed = user.isEmailConfirmed();
         this.authorities = user.getRoles().stream()
                 .map(Role::getName)
                 .map(SimpleGrantedAuthority::new)
@@ -64,6 +60,9 @@ public abstract class UserDetailsImpl implements UserDetails {
         this.createdBy = user.getCreatedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
+        this.accountNonLocked = user.isAccountNonLocked();
+        this.withdraw = user.isWithdraw();
+        this.emailConfirmed = user.isEmailConfirmed();
     }
 
     @Override
@@ -83,7 +82,7 @@ public abstract class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !this.accountLocked;
+        return this.accountNonLocked;
     }
 
     @Override

@@ -34,10 +34,10 @@ public abstract class User extends BaseEntity {
     private String password;
 
     @Column(nullable = false)
-    private boolean withdraw;
+    private boolean accountNonLocked;
 
     @Column(nullable = false)
-    private boolean accountLocked;
+    private boolean withdraw;
 
     @Column(nullable = false)
     private boolean emailConfirmed;
@@ -53,7 +53,7 @@ public abstract class User extends BaseEntity {
         this.email = email;
         this.password = password;
         this.withdraw = false;
-        this.accountLocked = false;
+        this.accountNonLocked = true;
         this.emailConfirmed = false;
     }
 
@@ -70,11 +70,11 @@ public abstract class User extends BaseEntity {
     }
 
     public void unlockAccount() {
-        this.accountLocked = false;
+        this.accountNonLocked = true;
     }
 
     public void lockAccount() {
-        this.accountLocked = true;
+        this.accountNonLocked = false;
     }
 
     public void withdrawAccount() {

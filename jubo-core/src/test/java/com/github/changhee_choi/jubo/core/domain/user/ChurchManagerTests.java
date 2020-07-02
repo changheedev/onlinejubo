@@ -43,7 +43,7 @@ class ChurchManagerTests {
         assertThat(manager.getName()).isEqualTo("test_user");
         assertThat(manager.getEmail()).isEqualTo("test@email.com");
         assertThat(manager.getPassword()).isEqualTo("password");
-        assertThat(manager.isAccountLocked()).isFalse();
+        assertThat(manager.isAccountNonLocked()).isTrue();
         assertThat(manager.isEmailConfirmed()).isFalse();
         assertThat(manager.isWithdraw()).isFalse();
         assertThat(manager.isServiceAllowed()).isFalse();
@@ -86,7 +86,7 @@ class ChurchManagerTests {
         assertThat(updatedManager.getEmail()).isEqualTo("updated@email.com");
         assertThat(updatedManager.getName()).isEqualTo("updated_user");
         assertThat(updatedManager.getPassword()).isEqualTo("updatedPassword");
-        assertThat(updatedManager.isAccountLocked()).isTrue();
+        assertThat(updatedManager.isAccountNonLocked()).isFalse();
         assertThat(updatedManager.isWithdraw()).isTrue();
         assertThat(updatedManager.isEmailConfirmed()).isTrue();
         assertThat(updatedManager.isServiceAllowed()).isTrue();

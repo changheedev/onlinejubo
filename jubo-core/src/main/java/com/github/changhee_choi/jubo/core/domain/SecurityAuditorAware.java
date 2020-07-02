@@ -1,9 +1,9 @@
 package com.github.changhee_choi.jubo.core.domain;
 
+import com.github.changhee_choi.jubo.core.dto.UserTokenClaims;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
@@ -11,14 +11,14 @@ import java.util.Optional;
  * @author Changhee Choi
  * @since 24/06/2020
  */
-public class SecurityAuditorAware implements AuditorAware<String> {
+public class SecurityAuditorAware implements AuditorAware<Long> {
     @Override
-    public Optional<String> getCurrentAuditor() {
+    public Optional<Long> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
-            return Optional.of("Server");
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserTokenClaims)) {
+            return Optional.empty();
         }
-        return Optional.of(((UserDetails) authentication.getPrincipal()).getUsername());
+        return Optional.of(((UserTokenClaims) authentication.getPrincipal()).getId());
     }
 }
 

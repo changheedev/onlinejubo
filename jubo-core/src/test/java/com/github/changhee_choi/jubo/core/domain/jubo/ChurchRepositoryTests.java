@@ -34,8 +34,8 @@ class ChurchRepositoryTests {
 
         assertThat(church.getName()).isEqualTo("test_church");
         assertThat(church.getMemberNum()).isEqualTo(30);
-        assertThat(church.getCreatedBy()).isEqualTo("testUser(test@email.com)");
-        assertThat(church.getLastModifiedBy()).isEqualTo("testUser(test@email.com)");
+        assertThat(church.getCreatedBy()).isEqualTo(1L);
+        assertThat(church.getLastModifiedBy()).isEqualTo(1L);
         assertThat(church.getCreatedDate()).isNotNull();
         assertThat(church.getLastModifiedDate()).isNotNull();
     }

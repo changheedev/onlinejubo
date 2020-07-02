@@ -32,11 +32,11 @@ public class TestUserDetails implements UserDetails {
 
     private LocalDateTime createdDate;
 
-    private String createdBy;
+    private Long createdBy;
 
     private LocalDateTime lastModifiedDate;
 
-    private String lastModifiedBy;
+    private Long lastModifiedBy;
 
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -72,7 +72,7 @@ public class TestUserDetails implements UserDetails {
         this.createdDate = createdDate;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -80,7 +80,7 @@ public class TestUserDetails implements UserDetails {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public void setLastModifiedBy(String lastModifiedBy) {
+    public void setLastModifiedBy(Long lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
     }
 
@@ -108,7 +108,7 @@ public class TestUserDetails implements UserDetails {
         return createdDate;
     }
 
-    public String getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
@@ -116,7 +116,7 @@ public class TestUserDetails implements UserDetails {
         return lastModifiedDate;
     }
 
-    public String getLastModifiedBy() {
+    public Long getLastModifiedBy() {
         return lastModifiedBy;
     }
 

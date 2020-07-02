@@ -33,11 +33,11 @@ public abstract class UserDetailsImpl implements UserDetails {
 
     private LocalDateTime createdDate;
 
-    private String createdBy;
+    private Long createdBy;
 
     private LocalDateTime lastModifiedDate;
 
-    private String lastModifiedBy;
+    private Long lastModifiedBy;
 
     private Collection<? extends GrantedAuthority> authorities;
 

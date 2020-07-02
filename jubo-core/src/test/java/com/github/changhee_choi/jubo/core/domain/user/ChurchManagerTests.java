@@ -47,8 +47,8 @@ class ChurchManagerTests {
         assertThat(manager.isEmailConfirmed()).isFalse();
         assertThat(manager.isWithdraw()).isFalse();
         assertThat(manager.isServiceAllowed()).isFalse();
-        assertThat(manager.getCreatedBy()).isEqualTo("testUser(test@email.com)");
-        assertThat(manager.getLastModifiedBy()).isEqualTo("testUser(test@email.com)");
+        assertThat(manager.getCreatedBy()).isEqualTo(1L);
+        assertThat(manager.getLastModifiedBy()).isEqualTo(1L);
         assertThat(manager.getCreatedDate()).isNotNull();
         assertThat(manager.getLastModifiedDate()).isNotNull();
     }

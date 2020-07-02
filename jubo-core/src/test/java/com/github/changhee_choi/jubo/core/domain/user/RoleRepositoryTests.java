@@ -33,8 +33,8 @@ class RoleRepositoryTests {
 
         assertThat(role.getId()).isNotNull();
         assertThat(role.getName()).isEqualTo("ROLE_USER");
-        assertThat(role.getCreatedBy()).isEqualTo("testUser(test@email.com)");
-        assertThat(role.getLastModifiedBy()).isEqualTo("testUser(test@email.com)");
+        assertThat(role.getCreatedBy()).isEqualTo(1L);
+        assertThat(role.getLastModifiedBy()).isEqualTo(1L);
         assertThat(role.getCreatedDate()).isNotNull();
         assertThat(role.getLastModifiedDate()).isNotNull();
     }

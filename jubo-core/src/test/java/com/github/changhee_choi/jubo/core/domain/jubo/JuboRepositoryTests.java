@@ -39,8 +39,8 @@ class JuboRepositoryTests {
         assertThat(jubo.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .isEqualTo("2020-06-27 00:00:00");
         assertThat(jubo.getViewCount()).isEqualTo(0);
-        assertThat(jubo.getCreatedBy()).isEqualTo("testUser(test@email.com)");
-        assertThat(jubo.getLastModifiedBy()).isEqualTo("testUser(test@email.com)");
+        assertThat(jubo.getCreatedBy()).isEqualTo(1L);
+        assertThat(jubo.getLastModifiedBy()).isEqualTo(1L);
         assertThat(jubo.getCreatedDate()).isNotNull();
         assertThat(jubo.getLastModifiedDate()).isNotNull();
     }

@@ -41,7 +41,7 @@ class JwtUtilTests {
         userDetails.setId(1L);
         userDetails.setName("TestUser");
         userDetails.setEmail("test@email.com");
-        userDetails.setCreatedBy("Server");
+        userDetails.setCreatedBy(1L);
         userDetails.setCreatedDate(LocalDateTime.now());
 
         Collection<? extends GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("USER_ROLE"));

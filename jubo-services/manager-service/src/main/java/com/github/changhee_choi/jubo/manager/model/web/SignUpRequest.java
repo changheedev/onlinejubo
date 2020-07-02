@@ -12,6 +12,8 @@ import javax.validation.constraints.Pattern;
  */
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SignUpRequest {
 
     @NotNull

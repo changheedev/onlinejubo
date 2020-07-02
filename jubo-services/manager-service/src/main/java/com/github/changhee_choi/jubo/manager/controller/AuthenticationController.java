@@ -1,6 +1,7 @@
 package com.github.changhee_choi.jubo.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.changhee_choi.jubo.core.dto.UserTokenClaims;
 import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
 import com.github.changhee_choi.jubo.core.util.JwtUtil;
 import com.github.changhee_choi.jubo.manager.model.web.AuthenticationRequest;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Changhee Choi
@@ -36,7 +38,11 @@ public class AuthenticationController {
     public ResponseEntity authorize(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) {
 
         ChurchManagerDetails userDetails = authenticationService.authenticate(authenticationRequest);
-        String token = jwtUtil.generateToken(objectMapper.convertValue(userDetails, Map.class));
+        String token = jwtUtil.generateToken(UserTokenClaims.builder()
+                .id(userDetails.getId())
+                .name(userDetails.getName())
+                .roles(userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .build());
         Cookie cookie = new Cookie("ACCESS_TOKEN", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");

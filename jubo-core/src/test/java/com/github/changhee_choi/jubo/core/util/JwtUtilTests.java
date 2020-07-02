@@ -3,6 +3,7 @@ package com.github.changhee_choi.jubo.core.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.changhee_choi.jubo.core.domain.user.TestUserDetails;
+import com.github.changhee_choi.jubo.core.dto.UserTokenClaims;
 import com.github.changhee_choi.jubo.core.json.JsonConfig;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -52,9 +52,7 @@ class JwtUtilTests {
 
     @Test
     void generateToken() {
-        TestUserDetails userDetails = createTestUserDetails();
-        Map<String, Object> claims = mapper.convertValue(userDetails, Map.class);
-        assertThat(claims.get("createdDate").toString().matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"));
+        UserTokenClaims claims = UserTokenClaims.builder().id(1L).name("TestUser").roles(Arrays.asList("ROLE_USER")).build();
 
         String token = jwtUtil.generateToken(claims);
         System.out.println(token);
@@ -63,21 +61,19 @@ class JwtUtilTests {
 
     @Test
     void validateToken() {
-        TestUserDetails userDetails = createTestUserDetails();
-        Map<String, Object> claimsMap = mapper.convertValue(userDetails, Map.class);
-        String token = jwtUtil.generateToken(claimsMap);
 
-        Claims claims = jwtUtil.validateToken(token);
-        assertThat(claims.get("id", Long.class)).isEqualTo(1L);
-        assertThat(claims.get("name", String.class)).isEqualTo("TestUser");
-        assertThat(claims.get("createdDate", String.class).matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"));
+        UserTokenClaims claims = UserTokenClaims.builder().id(1L).name("TestUser").roles(Arrays.asList("ROLE_USER")).build();
+        String token = jwtUtil.generateToken(claims);
+
+        Claims validatedClaims = jwtUtil.validateToken(token);
+        assertThat(validatedClaims.get("id", Long.class)).isEqualTo(1L);
+        assertThat(validatedClaims.get("name", String.class)).isEqualTo("TestUser");
     }
 
     @Test
     void validationToken에서_토큰이_만료되었다면_AccessDeniedException이_던져진다() throws Exception{
-        TestUserDetails userDetails = createTestUserDetails();
-        Map<String, Object> claimsMap = mapper.convertValue(userDetails, Map.class);
-        String token = jwtUtil.generateToken(claimsMap);
+        UserTokenClaims claims = UserTokenClaims.builder().id(1L).name("TestUser").roles(Arrays.asList("ROLE_USER")).build();
+        String token = jwtUtil.generateToken(claims);
 
         Thread.sleep(2010L);
         assertThatThrownBy(() -> jwtUtil.validateToken(token))
@@ -86,11 +82,9 @@ class JwtUtilTests {
 
     @Test
     void validationToken에서_토큰의_Key가_다르면_AccessDeniedException이_던져진다(){
-        TestUserDetails userDetails = createTestUserDetails();
-        Map<String, Object> claimsMap = mapper.convertValue(userDetails, Map.class);
-
         JwtUtil otherJwtUtil = new JwtUtil("secret_key2", 10L);
-        String token = otherJwtUtil.generateToken(claimsMap);
+        UserTokenClaims claims = UserTokenClaims.builder().id(1L).name("TestUser").roles(Arrays.asList("ROLE_USER")).build();
+        String token = otherJwtUtil.generateToken(claims);
 
         assertThatThrownBy(() -> jwtUtil.validateToken(token))
                 .isInstanceOf(AccessDeniedException.class);

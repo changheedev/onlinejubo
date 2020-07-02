@@ -1,5 +1,6 @@
 package com.github.changhee_choi.jubo.core.util;
 
+import com.github.changhee_choi.jubo.core.dto.UserTokenClaims;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,7 +26,15 @@ public class JwtUtil {
         this.expirationSeconds = expirationSeconds;
     }
 
-    public String generateToken(Map<String, Object> claims) {
+    public String generateToken(UserTokenClaims userTokenClaims) {
+        Map<String, Object> claims  = new HashMap<>();
+        claims.put("id", userTokenClaims.getId());
+        claims.put("name", userTokenClaims.getName());
+        claims.put("roles", userTokenClaims.getRoles());
+        return generateToken(claims);
+    }
+
+    private String generateToken(Map<String, Object> claims) {
         LocalDateTime expiryDate = LocalDateTime.now().plusSeconds(expirationSeconds);
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")

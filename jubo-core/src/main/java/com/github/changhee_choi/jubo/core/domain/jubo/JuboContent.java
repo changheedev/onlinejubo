@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -38,6 +39,7 @@ public class JuboContent {
             inverseJoinColumns = @JoinColumn(name = "attachment_id", referencedColumnName = "id"))
     private Set<Attachment> attachments = new HashSet<>();
 
+    @Builder
     public JuboContent(String title, String content) {
         this.title = title;
         this.content = content;
@@ -60,5 +62,9 @@ public class JuboContent {
 
     public void addAttachment(Attachment attachment) {
         this.attachments.add(attachment);
+    }
+
+    public void addAttachments(List<Attachment> attachments) {
+        this.attachments.addAll(attachments);
     }
 }

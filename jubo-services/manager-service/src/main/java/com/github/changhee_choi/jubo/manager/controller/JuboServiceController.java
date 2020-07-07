@@ -1,7 +1,7 @@
 package com.github.changhee_choi.jubo.manager.controller;
 
 import com.github.changhee_choi.jubo.manager.service.JuboService;
-import com.github.changhee_choi.jubo.manager.web.payload.JuboFormPayload;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboRequestPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class JuboServiceController {
     private final JuboService juboService;
 
     @PostMapping("")
-    public ResponseEntity register(@Valid @RequestBody JuboFormPayload payload, BindingResult bindingResult) {
+    public ResponseEntity register(@Valid @RequestBody JuboRequestPayload payload, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             throw new ValidationException("주보 등록 요청 데이터가 올바르지 않습니다.");
         }

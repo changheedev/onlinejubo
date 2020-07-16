@@ -1,7 +1,7 @@
 package com.github.changhee_choi.jubo.manager.service;
 
 import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
-import com.github.changhee_choi.jubo.manager.model.web.AuthenticationRequest;
+import com.github.changhee_choi.jubo.manager.web.payload.AuthenticationRequest;
 
 /**
  * @author Changhee Choi

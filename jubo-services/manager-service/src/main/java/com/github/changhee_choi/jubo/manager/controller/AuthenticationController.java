@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.changhee_choi.jubo.core.dto.UserTokenClaims;
 import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
 import com.github.changhee_choi.jubo.core.util.JwtUtil;
-import com.github.changhee_choi.jubo.manager.model.web.AuthenticationRequest;
+import com.github.changhee_choi.jubo.manager.web.payload.AuthenticationRequest;
 import com.github.changhee_choi.jubo.manager.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

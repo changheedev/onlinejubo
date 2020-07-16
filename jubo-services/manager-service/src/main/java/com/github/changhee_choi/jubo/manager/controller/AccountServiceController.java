@@ -1,6 +1,6 @@
 package com.github.changhee_choi.jubo.manager.controller;
 
-import com.github.changhee_choi.jubo.manager.model.web.SignUpRequest;
+import com.github.changhee_choi.jubo.manager.web.payload.SignUpRequest;
 import com.github.changhee_choi.jubo.manager.service.DuplicateEmailException;
 import com.github.changhee_choi.jubo.manager.service.AccountService;
 import lombok.RequiredArgsConstructor;

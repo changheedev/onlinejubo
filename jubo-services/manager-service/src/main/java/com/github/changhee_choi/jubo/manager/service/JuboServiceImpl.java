@@ -8,7 +8,7 @@ import com.github.changhee_choi.jubo.core.domain.church.ChurchNotFoundException;
 import com.github.changhee_choi.jubo.core.domain.church.ChurchRepository;
 import com.github.changhee_choi.jubo.core.domain.jubo.*;
 import com.github.changhee_choi.jubo.manager.web.payload.JuboContentPayload;
-import com.github.changhee_choi.jubo.manager.web.payload.JuboRequestPayload;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboRegistrationPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ public class JuboServiceImpl implements JuboService {
     private final AttachmentRepository attachmentRepository;
 
     @Override
-    public JuboDetails register(JuboRequestPayload payload) {
+    public JuboDetails register(JuboRegistrationPayload payload) {
 
         Church church = churchRepository.findById(payload.getChurchId())
                 .orElseThrow(() -> new ChurchNotFoundException("교회 정보를 찾을 수 없습니다. [" + payload.getChurchId() + "]"));

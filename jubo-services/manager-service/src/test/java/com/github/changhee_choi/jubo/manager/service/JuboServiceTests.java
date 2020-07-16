@@ -9,7 +9,7 @@ import com.github.changhee_choi.jubo.core.domain.church.ChurchNotFoundException;
 import com.github.changhee_choi.jubo.core.domain.church.ChurchRepository;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboDetails;
 import com.github.changhee_choi.jubo.manager.web.payload.JuboContentPayload;
-import com.github.changhee_choi.jubo.manager.web.payload.JuboRequestPayload;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboRegistrationPayload;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,7 +44,7 @@ class JuboServiceTests {
         Attachment attachment1 = createAttachment("testFile1.jpg", FileType.IMAGE);
         Attachment attachment2 = createAttachment("testFile2.jpg", FileType.IMAGE);
 
-        JuboRequestPayload formPayload = JuboRequestPayload.builder()
+        JuboRegistrationPayload formPayload = JuboRegistrationPayload.builder()
                 .churchId(church.getId())
                 .title("2020년 7월 12일 주보")
                 .startDate(LocalDateTime.of(2020, 7, 12, 0, 0))
@@ -72,7 +72,7 @@ class JuboServiceTests {
 
     @Test
     void 주보를_등록할때_등록되지_않은_교회Id가_사용된_경우_EntityNotFoundException이_던져진다() {
-        JuboRequestPayload formPayload = JuboRequestPayload.builder()
+        JuboRegistrationPayload formPayload = JuboRegistrationPayload.builder()
                 .churchId(UUID.randomUUID())
                 .title("2020년 7월 12일 주보")
                 .startDate(LocalDateTime.of(2020, 7, 12, 0, 0))
@@ -88,7 +88,7 @@ class JuboServiceTests {
         Church church = createChurch("MyChurch", 20);
         Attachment attachment = createAttachment("testFile1.jpg", FileType.IMAGE);
 
-        JuboRequestPayload formPayload = JuboRequestPayload.builder()
+        JuboRegistrationPayload formPayload = JuboRegistrationPayload.builder()
                 .churchId(church.getId())
                 .title("2020년 7월 12일 주보")
                 .startDate(LocalDateTime.of(2020, 7, 12, 0, 0))

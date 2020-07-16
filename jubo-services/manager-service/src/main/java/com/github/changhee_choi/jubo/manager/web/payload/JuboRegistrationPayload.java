@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 @Data
 @NoArgsConstructor
-public class JuboRequestPayload {
+public class JuboRegistrationPayload {
     @NotBlank
     @Size(min = 1, max = 50)
     private String title;
@@ -36,8 +36,8 @@ public class JuboRequestPayload {
     private List<JuboContentPayload> juboContents = new ArrayList<>();
 
     @Builder
-    public JuboRequestPayload(@NotBlank @Size(min = 1, max = 50) String title, @NotNull UUID churchId,
-                              @NotNull LocalDateTime startDate, @NotEmpty List<JuboContentPayload> juboContents) {
+    public JuboRegistrationPayload(@NotBlank @Size(min = 1, max = 50) String title, @NotNull UUID churchId,
+                                   @NotNull LocalDateTime startDate, @NotEmpty List<JuboContentPayload> juboContents) {
         this.title = title;
         this.churchId = churchId;
         this.startDate = startDate;

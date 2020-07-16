@@ -1,6 +1,6 @@
 package com.github.changhee_choi.jubo.core.util;
 
-import com.github.changhee_choi.jubo.core.dto.UserTokenClaims;
+import com.github.changhee_choi.jubo.core.domain.user.UserTokenClaims;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

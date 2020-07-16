@@ -1,7 +1,7 @@
 package com.github.changhee_choi.jubo.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.changhee_choi.jubo.core.dto.UserTokenClaims;
+import com.github.changhee_choi.jubo.core.domain.user.UserTokenClaims;
 import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
 import com.github.changhee_choi.jubo.core.util.JwtUtil;
 import com.github.changhee_choi.jubo.manager.web.payload.AuthenticationRequest;

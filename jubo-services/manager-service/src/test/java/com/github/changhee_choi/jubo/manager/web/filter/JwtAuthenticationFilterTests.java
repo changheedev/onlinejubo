@@ -1,6 +1,6 @@
 package com.github.changhee_choi.jubo.manager.web.filter;
 
-import com.github.changhee_choi.jubo.core.dto.UserTokenClaims;
+import com.github.changhee_choi.jubo.core.domain.user.UserTokenClaims;
 import com.github.changhee_choi.jubo.core.util.JwtUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.github.changhee_choi.jubo.core.json;
+package com.github.changhee_choi.jubo.core.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;

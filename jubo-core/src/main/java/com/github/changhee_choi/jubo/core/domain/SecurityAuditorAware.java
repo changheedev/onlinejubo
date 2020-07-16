@@ -1,6 +1,6 @@
 package com.github.changhee_choi.jubo.core.domain;
 
-import com.github.changhee_choi.jubo.core.dto.UserTokenClaims;
+import com.github.changhee_choi.jubo.core.domain.user.UserTokenClaims;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

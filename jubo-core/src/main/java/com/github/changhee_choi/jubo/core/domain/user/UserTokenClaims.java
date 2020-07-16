@@ -1,4 +1,4 @@
-package com.github.changhee_choi.jubo.core.dto;
+package com.github.changhee_choi.jubo.core.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

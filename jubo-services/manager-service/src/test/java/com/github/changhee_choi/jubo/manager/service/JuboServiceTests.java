@@ -33,13 +33,12 @@ class JuboServiceTests {
         Church church = createChurch("MyChurch", 20);
 
         JuboRegistrationPayload formPayload = JuboRegistrationPayload.builder()
-                .churchId(church.getId())
                 .title("2020년 7월 12일 주보")
                 .startDate(LocalDateTime.of(2020, 7, 12, 0, 0))
                 .build();
 
         //when
-        JuboDetails juboDetails = juboService.register(formPayload);
+        JuboDetails juboDetails = juboService.register(church.getId(), formPayload);
 
         //then
         assertThat(juboDetails.getId()).isNotNull();
@@ -50,12 +49,11 @@ class JuboServiceTests {
     @Test
     void 주보를_등록할때_등록되지_않은_교회Id가_사용된_경우_EntityNotFoundException이_던져진다() {
         JuboRegistrationPayload formPayload = JuboRegistrationPayload.builder()
-                .churchId(UUID.randomUUID())
                 .title("2020년 7월 12일 주보")
                 .startDate(LocalDateTime.of(2020, 7, 12, 0, 0))
                 .build();
 
-        assertThatThrownBy(() -> juboService.register(formPayload))
+        assertThatThrownBy(() -> juboService.register(UUID.randomUUID(), formPayload))
                 .isInstanceOf(EntityNotFoundException.class);
     }
 

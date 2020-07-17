@@ -34,12 +34,16 @@ public class JuboServiceController {
     private final JuboContentService juboContentService;
 
     @PostMapping("")
-    public ResponseEntity registerJubo(@Valid @RequestBody JuboRegistrationPayload payload, BindingResult bindingResult) {
+    public ResponseEntity registerJubo(@Valid @RequestBody JuboRegistrationPayload payload,
+                                       Authentication authentication, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.debug(bindingResult.getFieldErrors().toString());
             throw new ValidationException("주보 등록 요청 데이터가 올바르지 않습니다.");
         }
-        JuboDetails juboDetails = juboService.register(payload);
+
+        ChurchManagerTokenClaims tokenClaims = (ChurchManagerTokenClaims)authentication.getPrincipal();
+
+        JuboDetails juboDetails = juboService.register(tokenClaims.getChurchId(), payload);
         return ResponseEntity.status(HttpStatus.CREATED).body(juboDetails);
     }
 

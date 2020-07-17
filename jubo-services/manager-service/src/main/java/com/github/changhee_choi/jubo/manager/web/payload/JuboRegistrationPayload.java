@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * @author Changhee Choi
@@ -22,16 +21,11 @@ public class JuboRegistrationPayload {
     private String title;
 
     @NotNull
-    private UUID churchId;
-
-    @NotNull
     private LocalDateTime startDate;
 
     @Builder
-    public JuboRegistrationPayload(@NotBlank @Size(min = 1, max = 50) String title, @NotNull UUID churchId,
-                                   @NotNull LocalDateTime startDate) {
+    public JuboRegistrationPayload(@NotBlank @Size(min = 1, max = 50) String title, @NotNull LocalDateTime startDate) {
         this.title = title;
-        this.churchId = churchId;
         this.startDate = startDate;
     }
 }

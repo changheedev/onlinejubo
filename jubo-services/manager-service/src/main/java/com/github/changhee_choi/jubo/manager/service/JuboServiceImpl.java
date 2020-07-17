@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.UUID;
 
 /**
  * @author Changhee Choi
@@ -25,12 +26,12 @@ public class JuboServiceImpl implements JuboService {
     private final ChurchRepository churchRepository;
 
     @Override
-    public JuboDetails register(JuboRegistrationPayload payload) {
+    public JuboDetails register(UUID churchId, JuboRegistrationPayload payload) {
 
-        Church church = churchRepository.findById(payload.getChurchId())
+        Church church = churchRepository.findById(churchId)
                 .orElseThrow(() ->
                         new EntityNotFoundException(
-                                String.format("ID [%s]로 교회 정보를 찾을 수 없습니다.", payload.getChurchId())
+                                String.format("ID [%s]로 교회 정보를 찾을 수 없습니다.", churchId)
                         )
                 );
 

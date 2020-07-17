@@ -1,8 +1,8 @@
 package com.github.changhee_choi.jubo.manager.web.filter;
 
-import com.github.changhee_choi.jubo.core.domain.user.UserTokenClaims;
 import com.github.changhee_choi.jubo.core.util.CookieUtil;
-import com.github.changhee_choi.jubo.core.util.JwtUtil;
+import com.github.changhee_choi.jubo.manager.web.payload.ChurchManagerTokenClaims;
+import com.github.changhee_choi.jubo.manager.web.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
@@ -37,16 +39,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (jwtCookie.isPresent()) {
             Claims claims = jwtUtil.validateToken(jwtCookie.get().getValue());
-            UserTokenClaims userTokenClaims = UserTokenClaims.builder()
+            ChurchManagerTokenClaims tokenClaims = ChurchManagerTokenClaims.builder()
                     .id(claims.get("id", Long.class))
                     .name(claims.get("name", String.class))
-                    .roles(claims.get("roles", List.class)).build();
+                    .roles(claims.get("roles", List.class))
+                    .churchId(UUID.fromString(claims.get("churchId", String.class))).build();
 
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(
-                            userTokenClaims,
+                            tokenClaims,
                             null,
-                            userTokenClaims.getRoles()
+                            tokenClaims.getRoles()
                                     .stream()
                                     .map(SimpleGrantedAuthority::new)
                                     .collect(Collectors.toSet()));

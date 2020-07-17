@@ -3,7 +3,7 @@ package com.github.changhee_choi.jubo.manager.service;
 import com.github.changhee_choi.jubo.core.domain.church.Church;
 import com.github.changhee_choi.jubo.core.domain.church.ChurchRepository;
 import com.github.changhee_choi.jubo.core.domain.user.*;
-import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
+import com.github.changhee_choi.jubo.manager.userdetails.ChurchManagerDetails;
 import com.github.changhee_choi.jubo.manager.web.payload.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

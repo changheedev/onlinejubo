@@ -1,6 +1,6 @@
-package com.github.changhee_choi.jubo.core.util;
+package com.github.changhee_choi.jubo.manager.web.util;
 
-import com.github.changhee_choi.jubo.core.domain.user.UserTokenClaims;
+import com.github.changhee_choi.jubo.manager.web.payload.ChurchManagerTokenClaims;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -26,11 +26,12 @@ public class JwtUtil {
         this.expirationSeconds = expirationSeconds;
     }
 
-    public String generateToken(UserTokenClaims userTokenClaims) {
+    public String generateToken(ChurchManagerTokenClaims tokenClaims) {
         Map<String, Object> claims  = new HashMap<>();
-        claims.put("id", userTokenClaims.getId());
-        claims.put("name", userTokenClaims.getName());
-        claims.put("roles", userTokenClaims.getRoles());
+        claims.put("id", tokenClaims.getId());
+        claims.put("name", tokenClaims.getName());
+        claims.put("roles", tokenClaims.getRoles());
+        claims.put("churchId", tokenClaims.getChurchId());
         return generateToken(claims);
     }
 

@@ -1,7 +1,7 @@
 package com.github.changhee_choi.jubo.manager.web.filter;
 
-import com.github.changhee_choi.jubo.core.domain.user.UserTokenClaims;
-import com.github.changhee_choi.jubo.core.util.JwtUtil;
+import com.github.changhee_choi.jubo.manager.web.payload.ChurchManagerTokenClaims;
+import com.github.changhee_choi.jubo.manager.web.util.JwtUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockFilterChain;
@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,7 +39,13 @@ class JwtAuthenticationFilterTests {
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
 
-        UserTokenClaims claims = UserTokenClaims.builder().id(1L).name("TestUser").roles(Arrays.asList("ROLE_USER")).build();
+        ChurchManagerTokenClaims claims = ChurchManagerTokenClaims.builder()
+                .id(1L)
+                .name("TestUser")
+                .roles(Arrays.asList("ROLE_USER"))
+                .churchId(UUID.randomUUID())
+                .build();
+
         String token = jwtUtil.generateToken(claims);
         request.setCookies(new Cookie("ACCESS_TOKEN", token));
 
@@ -47,10 +54,11 @@ class JwtAuthenticationFilterTests {
         Authentication authentication = securityContext.getAuthentication();
         assertThat(securityContext.getAuthentication()).isNotNull();
 
-        UserTokenClaims userTokenClaims = (UserTokenClaims)authentication.getPrincipal();
-        assertThat(userTokenClaims.getId()).isEqualTo(1L);
-        assertThat(userTokenClaims.getName()).isEqualTo("TestUser");
-        assertThat(userTokenClaims.getRoles().contains("ROLE_USER")).isTrue();
+        ChurchManagerTokenClaims tokenClaims = (ChurchManagerTokenClaims) authentication.getPrincipal();
+        assertThat(tokenClaims.getId()).isEqualTo(claims.getId());
+        assertThat(tokenClaims.getName()).isEqualTo(claims.getName());
+        assertThat(tokenClaims.getRoles().contains("ROLE_USER")).isTrue();
+        assertThat(tokenClaims.getChurchId()).isEqualTo(claims.getChurchId());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.github.changhee_choi.jubo.core.domain.jubo;
 
 import com.github.changhee_choi.jubo.core.domain.church.Church;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,7 +24,7 @@ public class JuboDetails {
     private LocalDateTime endDate;
     private List<JuboContentDetails> contents = new ArrayList<>();
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private JuboDetails(Long id, String title, int viewCount, LocalDateTime startDate, LocalDateTime endDate,
                        List<JuboContentDetails> contents) {
         this.id = id;

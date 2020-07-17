@@ -2,6 +2,7 @@ package com.github.changhee_choi.jubo.core.domain.jubo;
 
 import com.github.changhee_choi.jubo.core.domain.attachment.Attachment;
 import com.github.changhee_choi.jubo.core.domain.attachment.AttachmentDetails;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,7 +20,7 @@ public class JuboContentDetails {
     private String content;
     private List<AttachmentDetails> attachments;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private JuboContentDetails(Long id, String title, String content, List<AttachmentDetails> attachments) {
         this.id = id;
         this.title = title;

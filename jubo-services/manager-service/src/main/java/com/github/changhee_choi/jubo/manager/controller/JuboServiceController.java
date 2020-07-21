@@ -1,7 +1,5 @@
 package com.github.changhee_choi.jubo.manager.controller;
 
-import com.github.changhee_choi.jubo.core.domain.attachment.AttachmentNotFoundException;
-import com.github.changhee_choi.jubo.core.domain.church.ChurchNotFoundException;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboContentDetails;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboDetails;
 import com.github.changhee_choi.jubo.manager.service.JuboContentService;
@@ -74,15 +72,5 @@ public class JuboServiceController {
 
         JuboDetails juboDetails = juboService.update(tokenClaims.getChurchId(), id, payload);
         return ResponseEntity.status(HttpStatus.OK).body(juboDetails);
-    }
-
-    @ExceptionHandler(value = {ValidationException.class})
-    public ResponseEntity validationExceptionHandler(Exception e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
-
-    @ExceptionHandler(value = {ChurchNotFoundException.class, AttachmentNotFoundException.class})
-    public ResponseEntity entityNotFoundExceptionHanlder(Exception e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

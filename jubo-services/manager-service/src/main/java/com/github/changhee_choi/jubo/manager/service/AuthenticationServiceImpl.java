@@ -1,7 +1,7 @@
 package com.github.changhee_choi.jubo.manager.service;
 
-import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
-import com.github.changhee_choi.jubo.manager.model.web.AuthenticationRequest;
+import com.github.changhee_choi.jubo.manager.userdetails.ChurchManagerDetails;
+import com.github.changhee_choi.jubo.manager.web.payload.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

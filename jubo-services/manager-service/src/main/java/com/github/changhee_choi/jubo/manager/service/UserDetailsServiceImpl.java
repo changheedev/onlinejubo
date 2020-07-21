@@ -2,12 +2,9 @@ package com.github.changhee_choi.jubo.manager.service;
 
 import com.github.changhee_choi.jubo.core.domain.user.ChurchManager;
 import com.github.changhee_choi.jubo.core.domain.user.User;
-import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
-import com.github.changhee_choi.jubo.core.userdetails.UserDetailsImpl;
+import com.github.changhee_choi.jubo.manager.userdetails.ChurchManagerDetails;
 import com.github.changhee_choi.jubo.core.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

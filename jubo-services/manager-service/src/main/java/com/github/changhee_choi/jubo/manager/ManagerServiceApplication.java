@@ -1,7 +1,7 @@
 package com.github.changhee_choi.jubo.manager;
 
-import com.github.changhee_choi.jubo.core.domain.DomainConfig;
-import com.github.changhee_choi.jubo.core.json.JsonConfig;
+import com.github.changhee_choi.jubo.core.config.DomainConfig;
+import com.github.changhee_choi.jubo.core.config.JsonConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

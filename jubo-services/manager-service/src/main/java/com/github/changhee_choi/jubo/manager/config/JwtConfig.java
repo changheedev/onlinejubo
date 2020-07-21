@@ -1,6 +1,6 @@
 package com.github.changhee_choi.jubo.manager.config;
 
-import com.github.changhee_choi.jubo.core.util.JwtUtil;
+import com.github.changhee_choi.jubo.manager.web.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

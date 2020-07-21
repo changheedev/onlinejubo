@@ -1,5 +1,6 @@
-package com.github.changhee_choi.jubo.core.domain;
+package com.github.changhee_choi.jubo.core.config;
 
+import com.github.changhee_choi.jubo.core.domain.SecurityAuditorAware;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

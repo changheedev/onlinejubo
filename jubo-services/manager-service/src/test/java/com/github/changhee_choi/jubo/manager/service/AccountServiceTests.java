@@ -2,8 +2,8 @@ package com.github.changhee_choi.jubo.manager.service;
 
 import com.github.changhee_choi.jubo.core.domain.user.User;
 import com.github.changhee_choi.jubo.core.domain.user.UserRepository;
-import com.github.changhee_choi.jubo.core.userdetails.ChurchManagerDetails;
-import com.github.changhee_choi.jubo.manager.model.web.SignUpRequest;
+import com.github.changhee_choi.jubo.manager.userdetails.ChurchManagerDetails;
+import com.github.changhee_choi.jubo.manager.web.payload.SignUpRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

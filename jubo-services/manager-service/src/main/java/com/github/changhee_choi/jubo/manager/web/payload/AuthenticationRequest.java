@@ -1,4 +1,4 @@
-package com.github.changhee_choi.jubo.manager.model.web;
+package com.github.changhee_choi.jubo.manager.web.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

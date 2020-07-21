@@ -3,7 +3,7 @@ package com.github.changhee_choi.jubo.manager.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.changhee_choi.jubo.core.domain.user.User;
 import com.github.changhee_choi.jubo.core.domain.user.UserRepository;
-import com.github.changhee_choi.jubo.manager.model.web.SignUpRequest;
+import com.github.changhee_choi.jubo.manager.web.payload.SignUpRequest;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

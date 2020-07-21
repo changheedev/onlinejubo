@@ -3,7 +3,7 @@ package com.github.changhee_choi.jubo.manager.service;
 import com.github.changhee_choi.jubo.core.domain.attachment.Attachment;
 import com.github.changhee_choi.jubo.core.domain.attachment.AttachmentRepository;
 import com.github.changhee_choi.jubo.core.domain.jubo.*;
-import com.github.changhee_choi.jubo.manager.web.payload.JuboContentRegistrationPayload;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboContentRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
@@ -29,7 +29,7 @@ public class JuboContentServiceImpl implements JuboContentService {
     private final AttachmentRepository attachmentRepository;
 
     @Override
-    public JuboContentDetails register(UUID churchIdOfManager, Long juboId, JuboContentRegistrationPayload payload) {
+    public JuboContentDetails register(UUID churchIdOfManager, Long juboId, JuboContentRequest payload) {
 
         Jubo jubo = juboRepository.findById(juboId)
                 .orElseThrow(() ->

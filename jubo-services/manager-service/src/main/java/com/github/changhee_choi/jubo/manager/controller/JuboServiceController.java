@@ -7,8 +7,8 @@ import com.github.changhee_choi.jubo.core.domain.jubo.JuboDetails;
 import com.github.changhee_choi.jubo.manager.service.JuboContentService;
 import com.github.changhee_choi.jubo.manager.service.JuboService;
 import com.github.changhee_choi.jubo.manager.web.payload.ChurchManagerTokenClaims;
-import com.github.changhee_choi.jubo.manager.web.payload.JuboContentRegistrationPayload;
-import com.github.changhee_choi.jubo.manager.web.payload.JuboRegistrationPayload;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboContentRequest;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class JuboServiceController {
     private final JuboContentService juboContentService;
 
     @PostMapping("")
-    public ResponseEntity registerJubo(@Valid @RequestBody JuboRegistrationPayload payload,
+    public ResponseEntity registerJubo(@Valid @RequestBody JuboRequest payload,
                                        Authentication authentication, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.debug(bindingResult.getFieldErrors().toString());
@@ -49,7 +49,7 @@ public class JuboServiceController {
 
     @PostMapping("/{id}/contents")
     public ResponseEntity registerContent(@PathVariable Long id,
-                                          @Valid @RequestBody JuboContentRegistrationPayload payload,
+                                          @Valid @RequestBody JuboContentRequest payload,
                                           Authentication authentication, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.debug(bindingResult.getFieldErrors().toString());

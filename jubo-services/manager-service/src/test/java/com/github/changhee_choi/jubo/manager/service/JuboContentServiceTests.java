@@ -8,7 +8,7 @@ import com.github.changhee_choi.jubo.core.domain.church.ChurchRepository;
 import com.github.changhee_choi.jubo.core.domain.jubo.Jubo;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboContentDetails;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboRepository;
-import com.github.changhee_choi.jubo.manager.web.payload.JuboContentRegistrationPayload;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboContentRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,7 +46,7 @@ class JuboContentServiceTests {
         Attachment attachment1 = createAttachment("testFile1.jpg", FileType.IMAGE);
         Attachment attachment2 = createAttachment("testFile2.jpg", FileType.IMAGE);
 
-        JuboContentRegistrationPayload payload = JuboContentRegistrationPayload.builder()
+        JuboContentRequest payload = JuboContentRequest.builder()
                 .title("주일 1부 예배")
                 .content("내용")
                 .attachmentIds(Arrays.asList(attachment1.getId(), attachment2.getId()))
@@ -68,7 +68,7 @@ class JuboContentServiceTests {
         Jubo jubo = createJubo("2020년 7월 17일 주보");
         Attachment attachment = createAttachment("testFile1.jpg", FileType.IMAGE);
 
-        JuboContentRegistrationPayload payload = JuboContentRegistrationPayload.builder()
+        JuboContentRequest payload = JuboContentRequest.builder()
                 .title("주일 1부 예배")
                 .content("내용")
                 .attachmentIds(Arrays.asList(attachment.getId(), UUID.randomUUID()))
@@ -85,7 +85,7 @@ class JuboContentServiceTests {
         //given
         Jubo jubo = createJubo("2020년 7월 17일 주보");
 
-        JuboContentRegistrationPayload payload = JuboContentRegistrationPayload.builder()
+        JuboContentRequest payload = JuboContentRequest.builder()
                 .title("주일 1부 예배")
                 .content("내용")
                 .attachmentIds(new ArrayList<>())

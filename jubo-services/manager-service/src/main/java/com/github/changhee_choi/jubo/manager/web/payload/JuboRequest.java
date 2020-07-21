@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @NoArgsConstructor
-public class JuboRegistrationPayload {
+public class JuboRequest {
     @NotBlank
     @Size(min = 1, max = 50)
     private String title;
@@ -24,7 +24,7 @@ public class JuboRegistrationPayload {
     private LocalDateTime startDate;
 
     @Builder
-    public JuboRegistrationPayload(@NotBlank @Size(min = 1, max = 50) String title, @NotNull LocalDateTime startDate) {
+    public JuboRequest(@NotBlank @Size(min = 1, max = 50) String title, @NotNull LocalDateTime startDate) {
         this.title = title;
         this.startDate = startDate;
     }

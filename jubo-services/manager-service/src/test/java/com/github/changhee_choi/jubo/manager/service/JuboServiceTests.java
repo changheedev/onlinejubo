@@ -3,7 +3,7 @@ package com.github.changhee_choi.jubo.manager.service;
 import com.github.changhee_choi.jubo.core.domain.church.Church;
 import com.github.changhee_choi.jubo.core.domain.church.ChurchRepository;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboDetails;
-import com.github.changhee_choi.jubo.manager.web.payload.JuboRegistrationPayload;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +32,7 @@ class JuboServiceTests {
         //given
         Church church = createChurch("MyChurch", 20);
 
-        JuboRegistrationPayload formPayload = JuboRegistrationPayload.builder()
+        JuboRequest formPayload = JuboRequest.builder()
                 .title("2020년 7월 12일 주보")
                 .startDate(LocalDateTime.of(2020, 7, 12, 0, 0))
                 .build();
@@ -48,7 +48,7 @@ class JuboServiceTests {
 
     @Test
     void 주보를_등록할때_등록되지_않은_교회Id가_사용된_경우_EntityNotFoundException이_던져진다() {
-        JuboRegistrationPayload formPayload = JuboRegistrationPayload.builder()
+        JuboRequest formPayload = JuboRequest.builder()
                 .title("2020년 7월 12일 주보")
                 .startDate(LocalDateTime.of(2020, 7, 12, 0, 0))
                 .build();

@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 @Data
 @NoArgsConstructor
-public class JuboContentRegistrationPayload {
+public class JuboContentRequest {
     @NotBlank
     @Size(min = 1, max = 50)
     private String title;
@@ -27,8 +27,8 @@ public class JuboContentRegistrationPayload {
     private List<UUID> attachmentIds = new ArrayList<>();
 
     @Builder
-    public JuboContentRegistrationPayload(@NotBlank @Size(min = 1, max = 50) String title, @NotBlank String content,
-                                          List<UUID> attachmentIds) {
+    public JuboContentRequest(@NotBlank @Size(min = 1, max = 50) String title, @NotBlank String content,
+                              List<UUID> attachmentIds) {
         this.title = title;
         this.content = content;
         if (attachmentIds != null) {

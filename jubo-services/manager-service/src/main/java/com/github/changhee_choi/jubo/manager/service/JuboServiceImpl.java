@@ -5,7 +5,7 @@ import com.github.changhee_choi.jubo.core.domain.church.ChurchRepository;
 import com.github.changhee_choi.jubo.core.domain.jubo.Jubo;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboDetails;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboRepository;
-import com.github.changhee_choi.jubo.manager.web.payload.JuboRegistrationPayload;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ public class JuboServiceImpl implements JuboService {
     private final ChurchRepository churchRepository;
 
     @Override
-    public JuboDetails register(UUID churchId, JuboRegistrationPayload payload) {
+    public JuboDetails register(UUID churchId, JuboRequest payload) {
 
         Church church = churchRepository.findById(churchId)
                 .orElseThrow(() ->

@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/users", "/authorize").anonymous()
                 .antMatchers(HttpMethod.POST, "/jubo/**").hasRole("CHURCH_MANAGER")
+                .antMatchers(HttpMethod.PUT,  "/jubo/**").hasRole("CHURCH_MANAGER")
                 .anyRequest().authenticated().and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));

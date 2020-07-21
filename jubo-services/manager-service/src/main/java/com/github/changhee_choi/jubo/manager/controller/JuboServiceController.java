@@ -62,6 +62,20 @@ public class JuboServiceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(contentDetails);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity updateJubo(@PathVariable Long id, @Valid @RequestBody JuboRequest payload,
+                                     Authentication authentication, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            log.debug(bindingResult.getFieldErrors().toString());
+            throw new ValidationException("주보 업데이트 요청 데이터가 올바르지 않습니다.");
+        }
+
+        ChurchManagerTokenClaims tokenClaims = (ChurchManagerTokenClaims)authentication.getPrincipal();
+
+        JuboDetails juboDetails = juboService.update(tokenClaims.getChurchId(), id, payload);
+        return ResponseEntity.status(HttpStatus.OK).body(juboDetails);
+    }
+
     @ExceptionHandler(value = {ValidationException.class})
     public ResponseEntity validationExceptionHandler(Exception e) {
         return ResponseEntity.badRequest().body(e.getMessage());

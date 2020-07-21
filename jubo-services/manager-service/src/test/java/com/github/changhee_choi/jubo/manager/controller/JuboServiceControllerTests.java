@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -66,7 +67,7 @@ class JuboServiceControllerTests {
         Church church = createChurch("MyChurch", 20);
         String payload = createJuboPayload("2020년 7월 12일 주보", "2020-07-12 00:00:00");
         mockMvc.perform(post("/jubo")
-                .cookie(new Cookie("ACCESS_TOKEN", createAccessToken(church.getId(), "ROLE_CHURCH_MANAGER")))
+                .cookie(createTokenCookie(church.getId(), "CHURCH_MANAGER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload))
                 .andExpect(status().isCreated())
@@ -80,7 +81,7 @@ class JuboServiceControllerTests {
     @Test
     void 주보등록_요청을_보냈을때_유저가_Church_Manager_Role을_가지지_않은_경우_Forbidden_상태가_응답된다() throws Exception {
         mockMvc.perform(post("/jubo")
-                .cookie(new Cookie("ACCESS_TOKEN", createAccessToken(UUID.randomUUID(), "ROLE_USER")))
+                .cookie(createTokenCookie(UUID.randomUUID(), "USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isForbidden());
@@ -91,7 +92,7 @@ class JuboServiceControllerTests {
         String payload = createJuboPayload("", "2020-07-12 00:00:00");
 
         mockMvc.perform(post("/jubo")
-                .cookie(new Cookie("ACCESS_TOKEN", createAccessToken(UUID.randomUUID(), "ROLE_CHURCH_MANAGER")))
+                .cookie(createTokenCookie(UUID.randomUUID(), "CHURCH_MANAGER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload))
                 .andExpect(status().isBadRequest());
@@ -102,7 +103,7 @@ class JuboServiceControllerTests {
         String payload = createJuboPayload("2020년 7월 12일 주보", "");
 
         mockMvc.perform(post("/jubo")
-                .cookie(new Cookie("ACCESS_TOKEN", createAccessToken(UUID.randomUUID(), "ROLE_CHURCH_MANAGER")))
+                .cookie(createTokenCookie(UUID.randomUUID(), "CHURCH_MANAGER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload))
                 .andExpect(status().isBadRequest());
@@ -113,7 +114,7 @@ class JuboServiceControllerTests {
         String payload = createJuboPayload("2020년 7월 12일 주보", "2020-07-12");
 
         mockMvc.perform(post("/jubo")
-                .cookie(new Cookie("ACCESS_TOKEN", createAccessToken(UUID.randomUUID(), "ROLE_CHURCH_MANAGER")))
+                .cookie(createTokenCookie(UUID.randomUUID(), "CHURCH_MANAGER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload))
                 .andExpect(status().isBadRequest());
@@ -148,7 +149,7 @@ class JuboServiceControllerTests {
 
         //when, then
         mockMvc.perform(post("/jubo/{id}/contents", UUID.randomUUID())
-                .cookie(new Cookie("ACCESS_TOKEN", createAccessToken(UUID.randomUUID(), "ROLE_CHURCH_MANAGER")))
+                .cookie(createTokenCookie(UUID.randomUUID(), "CHURCH_MANAGER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentPayload))
                 .andExpect(status().isBadRequest());
@@ -161,9 +162,84 @@ class JuboServiceControllerTests {
 
         //when, then
         mockMvc.perform(post("/jubo/{id}/contents", UUID.randomUUID())
-                .cookie(new Cookie("ACCESS_TOKEN", createAccessToken(UUID.randomUUID(), "ROLE_CHURCH_MANAGER")))
+                .cookie(createTokenCookie(UUID.randomUUID(), "CHURCH_MANAGER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentPayload))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 주보_업데이트에_성공한다() throws Exception {
+        Jubo jubo = createJubo("주보 제목");
+        String juboPayload = createJuboPayload("업데이트 된 제목", "2020-07-21 00:00:00");
+
+        mockMvc.perform(put("/jubo/{id}", jubo.getId())
+                .cookie(createTokenCookie(jubo.getChurch().getId(), "CHURCH_MANAGER"))
+                .content(juboPayload)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("업데이트 된 제목"))
+                .andExpect(jsonPath("$.startDate").value("2020-07-21 00:00:00"))
+                .andExpect(jsonPath("$.endDate").value("2020-07-27 00:00:00"));
+    }
+
+    @Test
+    void 유저가_CHURCH_MANAGER_권한을_가지고_있지_않으면_업데이트에_실패한다() throws Exception {
+        Jubo jubo = createJubo("주보 제목");
+        String juboPayload = createJuboPayload("업데이트 된 제목", "2020-07-21 00:00:00");
+
+        mockMvc.perform(put("/jubo/{id}", jubo.getId())
+                .cookie(createTokenCookie(jubo.getChurch().getId(), "USER"))
+                .content(juboPayload)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void 유저의_ChurchId_와_주보의_ChurchId_가_다르면_업데이트에_실패한다() throws Exception {
+        Jubo jubo = createJubo("주보 제목");
+        String juboPayload = createJuboPayload("업데이트 된 제목", "2020-07-21 00:00:00");
+
+        mockMvc.perform(put("/jubo/{id}", jubo.getId())
+                .cookie(createTokenCookie(UUID.randomUUID(), "CHURCH_MANAGER"))
+                .content(juboPayload)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void 주보의_제목이_입력되지_않은_경우_업데이트에_실패한다() throws Exception {
+        Jubo jubo = createJubo("주보 제목");
+        String juboPayload = createJuboPayload("", "2020-07-21 00:00:00");
+
+        mockMvc.perform(put("/jubo/{id}", jubo.getId())
+                .cookie(createTokenCookie(jubo.getChurch().getId(), "CHURCH_MANAGER"))
+                .content(juboPayload)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 주보의_시작_날짜가_입력되지_않은_경우_업데이트에_실패한다() throws Exception {
+        Jubo jubo = createJubo("주보 제목");
+        String juboPayload = createJuboPayload("주보 제목", "");
+
+        mockMvc.perform(put("/jubo/{id}", jubo.getId())
+                .cookie(createTokenCookie(jubo.getChurch().getId(), "CHURCH_MANAGER"))
+                .content(juboPayload)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 주보의_시작_날짜의_형식이_LocalDateTime타입으로_매핑할_수_없는_경우_업데이트에_실패한다() throws Exception {
+        Jubo jubo = createJubo("주보 제목");
+        String juboPayload = createJuboPayload("주보 제목", "2020-07-21");
+
+        mockMvc.perform(put("/jubo/{id}", jubo.getId())
+                .cookie(createTokenCookie(jubo.getChurch().getId(), "CHURCH_MANAGER"))
+                .content(juboPayload)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
@@ -224,5 +300,9 @@ class JuboServiceControllerTests {
                 .build();
 
         return jwtUtil.generateToken(claims);
+    }
+
+    private Cookie createTokenCookie(UUID churchId, String role) {
+        return new Cookie("ACCESS_TOKEN", createAccessToken(churchId, "ROLE_" + role));
     }
 }

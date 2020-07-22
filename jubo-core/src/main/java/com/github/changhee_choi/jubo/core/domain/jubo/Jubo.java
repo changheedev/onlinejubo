@@ -32,6 +32,9 @@ public class Jubo extends BaseEntity {
     private int viewCount;
 
     @Column(nullable = false)
+    private boolean deleted;
+
+    @Column(nullable = false)
     private LocalDateTime startDate;
 
     @Column(nullable = false)
@@ -48,6 +51,7 @@ public class Jubo extends BaseEntity {
     public Jubo(String title, LocalDateTime startDate) {
         this.title = title;
         this.viewCount = 0;
+        this.deleted = false;
         updateStartDate(startDate);
     }
 
@@ -65,5 +69,9 @@ public class Jubo extends BaseEntity {
         if (!this.church.getJuboList().contains(this)) {
             this.church.getJuboList().add(this);
         }
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 }

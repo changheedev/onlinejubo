@@ -48,11 +48,7 @@ public class JuboServiceImpl implements JuboService {
 
     @Override
     public JuboDetails update(UUID churchId, Long juboId, JuboRequest payload) {
-        Jubo jubo = juboRepository.findById(juboId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException(
-                                String.format("ID [%s]로 주보 정보를 찾을 수 없습니다.", juboId)
-                        ));
+        Jubo jubo = findJuboById(juboId);
 
         if (!jubo.getChurch().getId().equals(churchId)) {
             throw new AccessDeniedException("해당 교회에 대한 권한이 없습니다.");
@@ -62,5 +58,25 @@ public class JuboServiceImpl implements JuboService {
         jubo.updateStartDate(payload.getStartDate());
         juboRepository.save(jubo);
         return JuboDetails.of(jubo);
+    }
+
+    @Override
+    public void delete(UUID churchId, Long juboId) {
+        Jubo jubo = findJuboById(juboId);
+
+        if (!jubo.getChurch().getId().equals(churchId)) {
+            throw new AccessDeniedException("해당 교회에 대한 권한이 없습니다.");
+        }
+
+        jubo.delete();
+        juboRepository.save(jubo);
+    }
+
+    private Jubo findJuboById(Long id) {
+        return juboRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                String.format("ID [%s]로 주보 정보를 찾을 수 없습니다.", id)
+                        ));
     }
 }

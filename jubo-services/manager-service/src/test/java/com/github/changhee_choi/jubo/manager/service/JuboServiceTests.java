@@ -101,6 +101,32 @@ class JuboServiceTests {
         }).isInstanceOf(AccessDeniedException.class);
     }
 
+    @Test
+    void 주보_삭제에_성공한다() {
+        //given
+        Jubo jubo = createJubo("주보 제목");
+
+        //when
+        juboService.delete(jubo.getChurch().getId(), jubo.getId());
+
+        //then
+        Jubo deletedJubo = juboRepository.findById(jubo.getId()).get();
+        assertThat(deletedJubo.isDeleted()).isTrue();
+    }
+
+    @Test
+    void 요청된_ID로_주보_데이터를_찾을_수_없는_경우_삭제에_실패한다() {
+        assertThatThrownBy(() -> juboService.delete(UUID.randomUUID(), 10L))
+                .isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    void 유저의_ChurchId_와_주보의_ChurchId_가_다르면_삭제에_실패한다() {
+        Jubo jubo = createJubo("주보 제목");
+        assertThatThrownBy(() -> juboService.delete(UUID.randomUUID(), jubo.getId()))
+                .isInstanceOf(AccessDeniedException.class);
+    }
+
     private Church createChurch(String name, int memberNum) {
         Church church = Church.builder().name(name).memberNum(memberNum).build();
         return churchRepository.save(church);

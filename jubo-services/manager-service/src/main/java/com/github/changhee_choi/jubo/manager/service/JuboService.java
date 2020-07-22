@@ -13,4 +13,6 @@ public interface JuboService {
     JuboDetails register(UUID churchId, JuboRequest payload);
 
     JuboDetails update(UUID churchId, Long juboId, JuboRequest payload);
+
+    void delete(UUID churchId, Long juboId);
 }

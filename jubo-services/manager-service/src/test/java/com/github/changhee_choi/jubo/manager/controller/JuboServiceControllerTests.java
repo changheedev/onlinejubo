@@ -27,8 +27,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -241,6 +240,24 @@ class JuboServiceControllerTests {
                 .content(juboPayload)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 주보_삭제에_성공한다() throws Exception {
+        Jubo jubo = createJubo("주보 제목");
+
+        mockMvc.perform(delete("/jubo/{id}", jubo.getId())
+                .cookie(createTokenCookie(jubo.getChurch().getId(), "CHURCH_MANAGER")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void 유저의_ChurchId_와_주보의_ChurchId_가_다르면_삭제에_실패한다() throws Exception {
+        Jubo jubo = createJubo("주보 제목");
+
+        mockMvc.perform(delete("/jubo/{id}", jubo.getId())
+                .cookie(createTokenCookie(UUID.randomUUID(), "CHURCH_MANAGER")))
+                .andExpect(status().isForbidden());
     }
 
     private Church createChurch(String name, int memberNum) {

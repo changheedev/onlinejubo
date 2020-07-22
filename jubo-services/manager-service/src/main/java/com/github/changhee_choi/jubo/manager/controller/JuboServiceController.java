@@ -31,6 +31,7 @@ public class JuboServiceController {
     private final JuboService juboService;
     private final JuboContentService juboContentService;
 
+    /*Jubo*/
     @PostMapping("")
     public ResponseEntity registerJubo(@Valid @RequestBody JuboRequest payload,
                                        Authentication authentication, BindingResult bindingResult) {
@@ -45,6 +46,29 @@ public class JuboServiceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(juboDetails);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity updateJubo(@PathVariable Long id, @Valid @RequestBody JuboRequest payload,
+                                     Authentication authentication, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            log.debug(bindingResult.getFieldErrors().toString());
+            throw new ValidationException("주보 업데이트 요청 데이터가 올바르지 않습니다.");
+        }
+
+        ChurchManagerTokenClaims tokenClaims = (ChurchManagerTokenClaims)authentication.getPrincipal();
+
+        JuboDetails juboDetails = juboService.update(tokenClaims.getChurchId(), id, payload);
+        return ResponseEntity.status(HttpStatus.OK).body(juboDetails);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteJubo(@PathVariable Long id, Authentication authentication) {
+        ChurchManagerTokenClaims tokenClaims = (ChurchManagerTokenClaims)authentication.getPrincipal();
+        juboService.delete(tokenClaims.getChurchId(), id);
+        return ResponseEntity.ok().build();
+    }
+
+
+    /*JuboContent*/
     @PostMapping("/{id}/contents")
     public ResponseEntity registerContent(@PathVariable Long id,
                                           @Valid @RequestBody JuboContentRequest payload,
@@ -58,19 +82,5 @@ public class JuboServiceController {
 
         JuboContentDetails contentDetails = juboContentService.register(tokenClaims.getChurchId(), id, payload);
         return ResponseEntity.status(HttpStatus.CREATED).body(contentDetails);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity updateJubo(@PathVariable Long id, @Valid @RequestBody JuboRequest payload,
-                                     Authentication authentication, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            log.debug(bindingResult.getFieldErrors().toString());
-            throw new ValidationException("주보 업데이트 요청 데이터가 올바르지 않습니다.");
-        }
-
-        ChurchManagerTokenClaims tokenClaims = (ChurchManagerTokenClaims)authentication.getPrincipal();
-
-        JuboDetails juboDetails = juboService.update(tokenClaims.getChurchId(), id, payload);
-        return ResponseEntity.status(HttpStatus.OK).body(juboDetails);
     }
 }

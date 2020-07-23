@@ -31,8 +31,9 @@ public class Jubo extends BaseEntity {
     @Column(nullable = false)
     private int viewCount;
 
-    @Column(nullable = false)
-    private boolean deleted;
+    @Getter(AccessLevel.NONE)
+    @Column(nullable = false, length = 1)
+    private Boolean deleted;
 
     @Column(nullable = false)
     private LocalDateTime startDate;
@@ -73,5 +74,9 @@ public class Jubo extends BaseEntity {
 
     public void delete() {
         this.deleted = true;
+    }
+
+    public boolean isDeleted() {
+        return this.deleted;
     }
 }

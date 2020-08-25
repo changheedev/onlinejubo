@@ -1,9 +1,11 @@
 package com.github.changhee_choi.jubo.manager.service;
 
+import com.github.changhee_choi.jubo.core.domain.attachment.AttachmentRepository;
 import com.github.changhee_choi.jubo.core.domain.jubo.Jubo;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboDetails;
 import com.github.changhee_choi.jubo.core.domain.jubo.JuboRepository;
 import com.github.changhee_choi.jubo.manager.TestParameterSupport;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboContentRequest;
 import com.github.changhee_choi.jubo.manager.web.payload.JuboRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.security.access.AccessDeniedException;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,22 +32,47 @@ class JuboServiceTests extends TestParameterSupport {
     private JuboService juboService;
     @Autowired
     private JuboRepository juboRepository;
+    @Autowired
+    private AttachmentRepository attachmentRepository;
+
+    private final String timetableTypeContentSample = "[" +
+            "{label:\"묵도\", value:\"시 65:1~4\"}," +
+            "{label:\"찬송\", value:\"1장\"}," +
+            "{label:\"신앙고백\", value:\"사도행전\"}," +
+            "]";
+
+    private final String postTypeContentSample = "<p>교회소식</p><br>" +
+            "<p><img src='https://example.com/images/test1.jpg'/></p>";
 
     @Test
     void 주보등록() {
         //given
+        JuboContentRequest contentPayload1 = JuboContentRequest.builder()
+                .title("주일 1부 예배")
+                .content(timetableTypeContentSample)
+                .build();
+
+        JuboContentRequest contentPayload2 = JuboContentRequest.builder()
+                .title("교회소식")
+                .content(postTypeContentSample)
+                .attachmentIds(Arrays.asList(
+                        UUID.fromString("a0fd7051-c82e-11ea-a901-0242ac120003"),
+                        UUID.fromString("9d6533ac-c83b-11ea-a901-0242ac120003")))
+                .build();
+
+        List<JuboContentRequest> contents = Arrays.asList(contentPayload1, contentPayload2);
+
         JuboRequest formPayload = JuboRequest.builder()
                 .title("2020년 7월 12일 주보")
                 .startDate(LocalDateTime.of(2020, 7, 12, 0, 0))
+                .contents(contents)
                 .build();
 
         //when
         JuboDetails juboDetails = juboService.register(churchId, formPayload);
 
         //then
-        assertThat(juboDetails.getId()).isNotNull();
-        assertThat(juboDetails.getStartDate()).isEqualTo(formPayload.getStartDate());
-        assertThat(juboDetails.getEndDate()).isEqualTo(formPayload.getStartDate().plusDays(6));
+        assertThat(juboDetails).isNotNull();
     }
 
     @Test

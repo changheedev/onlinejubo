@@ -1,22 +1,13 @@
 package com.github.changhee_choi.jubo.manager.controller;
 
 import com.github.changhee_choi.jubo.manager.WebMvcTestSupport;
-import com.github.changhee_choi.jubo.manager.web.payload.ChurchManagerTokenClaims;
-import com.github.changhee_choi.jubo.manager.web.util.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import javax.servlet.http.Cookie;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -31,6 +22,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 class JuboServiceControllerTests extends WebMvcTestSupport {
+
+    private final String timetableTypeContentSample = "[" +
+            "{\\\"label\\\" : \\\"묵도\\\", \\\"value\\\" : \\\"시 65:1~4\\\"}, " +
+            "{\\\"label\\\" : \\\"찬송\\\", \\\"value\\\" : \\\"1장\\\"}, " +
+            "{\\\"label\\\" : \\\"신앙고백\\\", \\\"value\\\" : \\\"사도행전\\\"}" +
+            "]";
+
+    private final String postTypeContentSample = "<p>교회소식</p><br>" +
+            "<p><img src='https://example.com/images/test1.jpg'/></p>";
 
     @BeforeEach
     public void setup() {
@@ -184,8 +184,20 @@ class JuboServiceControllerTests extends WebMvcTestSupport {
     private String createJuboPayload(String title, String startDate) {
         StringBuilder payLoadBuilder = new StringBuilder();
         payLoadBuilder.append("{")
-                .append("\"title\" : \"").append(title).append("\",")
-                .append("\"startDate\" : \"").append(startDate).append("\"")
+                .append("\"title\" : \"").append(title).append("\", ")
+                .append("\"startDate\" : \"").append(startDate).append("\", ")
+                .append("\"contents\" : [")
+                .append("{")
+                .append("\"title\" : \"주일 1부 예배\", ")
+                .append("\"content\" : \"").append(timetableTypeContentSample).append("\", ")
+                .append("\"attachmentIds\" : []")
+                .append("}, ")
+                .append("{")
+                .append("\"title\" : \"교회 소식\", ")
+                .append("\"content\" : \"").append(postTypeContentSample).append("\", ")
+                .append("\"attachmentIds\" : [\"a0fd7051-c82e-11ea-a901-0242ac120003\"]")
+                .append("}")
+                .append("]")
                 .append("}");
         return payLoadBuilder.toString();
     }

@@ -1,10 +1,11 @@
 package com.github.changhee_choi.jubo.manager.service;
 
+import com.github.changhee_choi.jubo.core.domain.attachment.Attachment;
+import com.github.changhee_choi.jubo.core.domain.attachment.AttachmentRepository;
 import com.github.changhee_choi.jubo.core.domain.church.Church;
 import com.github.changhee_choi.jubo.core.domain.church.ChurchRepository;
-import com.github.changhee_choi.jubo.core.domain.jubo.Jubo;
-import com.github.changhee_choi.jubo.core.domain.jubo.JuboDetails;
-import com.github.changhee_choi.jubo.core.domain.jubo.JuboRepository;
+import com.github.changhee_choi.jubo.core.domain.jubo.*;
+import com.github.changhee_choi.jubo.manager.web.payload.JuboContentRequest;
 import com.github.changhee_choi.jubo.manager.web.payload.JuboRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Changhee Choi
@@ -23,8 +26,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JuboServiceImpl implements JuboService {
 
-    private final JuboRepository juboRepository;
     private final ChurchRepository churchRepository;
+    private final JuboRepository juboRepository;
+    private final JuboContentRepository juboContentRepository;
+    private final AttachmentRepository attachmentRepository;
 
     @Override
     public JuboDetails register(UUID churchId, JuboRequest payload) {
@@ -43,7 +48,27 @@ public class JuboServiceImpl implements JuboService {
         jubo.setChurch(church);
         juboRepository.save(jubo);
 
+        payload.getContents().forEach(contentPayload -> registerContent(jubo, contentPayload));
+
         return JuboDetails.of(jubo);
+    }
+
+    private void registerContent(Jubo jubo, JuboContentRequest payload) {
+        JuboContent juboContent = JuboContent.builder()
+                .title(payload.getTitle())
+                .content(payload.getContent())
+                .build();
+
+        if (payload.getAttachmentIds().size() > 0) {
+            List<Attachment> attachments = attachmentRepository.findAllById(payload.getAttachmentIds());
+            if (attachments.size() != payload.getAttachmentIds().size()) {
+                throw new EntityNotFoundException("등록되지 않은 첨부 파일의 ID가 사용되었습니다.");
+            }
+            juboContent.addAttachments(attachments);
+        }
+
+        juboContent.setJubo(jubo);
+        juboContentRepository.save(juboContent);
     }
 
     @Override

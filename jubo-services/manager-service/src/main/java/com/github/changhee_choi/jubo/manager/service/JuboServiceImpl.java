@@ -53,6 +53,34 @@ public class JuboServiceImpl implements JuboService {
         return JuboDetails.of(jubo);
     }
 
+    /**
+     * 서버에 저장 되기 전 까지는 동작을 취소 할 수 있어야 한다.
+     * update 이후에도 컨텐츠들의 순서를 보장해야 한다.
+     *
+     * 사용자 화면에서 컨텐츠를 새로 등록하거나 수정/삭제 했을 때 개별적으로 DB에 반영하게 되면 사용자가 동작을 취소 했을 때의 처리가 어렵고
+     * 순서를 유지하기 위한 필드를 추가해야 하며 매번 순서 정보를 업데이트 해주어야 한다.
+     * 따라서, 사용자 화면 단에서는 변경된 이후의 전체 데이터를 서버로 전송하고
+     * 서버에서는 기존 컨텐츠 정보를 모두 삭제한 다음 변경된 이후의 컨텐츠 데이터를 새로 등록하는 방식으로 구현한다.
+     */
+    @Override
+    public JuboDetails update(UUID churchId, Long juboId, JuboRequest payload) {
+        Jubo jubo = findJuboById(juboId);
+
+        if (!jubo.getChurch().getId().equals(churchId)) {
+            throw new AccessDeniedException("해당 교회에 대한 권한이 없습니다.");
+        }
+
+        jubo.updateTitle(payload.getTitle());
+        jubo.updateStartDate(payload.getStartDate());
+
+        juboContentRepository.deleteAllByJuboId(juboId);
+        jubo.getContents().clear();
+        juboRepository.save(jubo);
+
+        payload.getContents().forEach(contentPayload -> registerContent(jubo, contentPayload));
+        return JuboDetails.of(jubo);
+    }
+
     private void registerContent(Jubo jubo, JuboContentRequest payload) {
         JuboContent juboContent = JuboContent.builder()
                 .title(payload.getTitle())
@@ -69,20 +97,6 @@ public class JuboServiceImpl implements JuboService {
 
         juboContent.setJubo(jubo);
         juboContentRepository.save(juboContent);
-    }
-
-    @Override
-    public JuboDetails update(UUID churchId, Long juboId, JuboRequest payload) {
-        Jubo jubo = findJuboById(juboId);
-
-        if (!jubo.getChurch().getId().equals(churchId)) {
-            throw new AccessDeniedException("해당 교회에 대한 권한이 없습니다.");
-        }
-
-        jubo.updateTitle(payload.getTitle());
-        jubo.updateStartDate(payload.getStartDate());
-        juboRepository.save(jubo);
-        return JuboDetails.of(jubo);
     }
 
     @Override

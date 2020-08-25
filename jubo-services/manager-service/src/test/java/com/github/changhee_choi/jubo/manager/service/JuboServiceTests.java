@@ -35,15 +35,6 @@ class JuboServiceTests extends TestParameterSupport {
     @Autowired
     private AttachmentRepository attachmentRepository;
 
-    private final String timetableTypeContentSample = "[" +
-            "{label:\"묵도\", value:\"시 65:1~4\"}," +
-            "{label:\"찬송\", value:\"1장\"}," +
-            "{label:\"신앙고백\", value:\"사도행전\"}," +
-            "]";
-
-    private final String postTypeContentSample = "<p>교회소식</p><br>" +
-            "<p><img src='https://example.com/images/test1.jpg'/></p>";
-
     @Test
     void 주보등록() {
         //given
@@ -55,9 +46,7 @@ class JuboServiceTests extends TestParameterSupport {
         JuboContentRequest contentPayload2 = JuboContentRequest.builder()
                 .title("교회소식")
                 .content(postTypeContentSample)
-                .attachmentIds(Arrays.asList(
-                        UUID.fromString("a0fd7051-c82e-11ea-a901-0242ac120003"),
-                        UUID.fromString("9d6533ac-c83b-11ea-a901-0242ac120003")))
+                .attachmentIds(attachmentIds)
                 .build();
 
         List<JuboContentRequest> contents = Arrays.asList(contentPayload1, contentPayload2);
@@ -87,21 +76,37 @@ class JuboServiceTests extends TestParameterSupport {
     }
 
     @Test
-    void 주보_업데이트에_성공한다() {
+    void 주보를_업데이트_하면_컨텐츠_리스트가_새로_등록된다() {
         //given
+        JuboContentRequest contentPayload1 = JuboContentRequest.builder()
+                .title("주일 1부 예배")
+                .content(timetableTypeContentSample)
+                .build();
+
+        JuboContentRequest contentPayload2 = JuboContentRequest.builder()
+                .title("주일 2부 예배")
+                .content(timetableTypeContentSample)
+                .build();
+
+        JuboContentRequest contentPayload3 = JuboContentRequest.builder()
+                .title("교회소식")
+                .content(postTypeContentSample)
+                .attachmentIds(attachmentIds)
+                .build();
+
+        List<JuboContentRequest> contents = Arrays.asList(contentPayload1, contentPayload2, contentPayload3);
+
         JuboRequest payload = JuboRequest.builder()
-                .title("업데이트 된 제목")
-                .startDate(LocalDateTime.of(2020, 07, 21, 0, 0))
+                .title("2020년 7월 12일 주보")
+                .startDate(LocalDateTime.of(2020, 7, 12, 0, 0))
+                .contents(contents)
                 .build();
 
         //when
-        JuboDetails updatedJuboDetails =
-                juboService.update(churchId, juboId, payload);
+        JuboDetails updatedJuboDetails = juboService.update(churchId, juboId, payload);
 
         //then
-        assertThat(updatedJuboDetails.getTitle()).isEqualTo(payload.getTitle());
-        assertThat(updatedJuboDetails.getStartDate()).isEqualTo(payload.getStartDate());
-        assertThat(updatedJuboDetails.getEndDate()).isEqualTo(payload.getStartDate().plusDays(6));
+        assertThat(updatedJuboDetails.getContents().size()).isEqualTo(3);
     }
 
     @Test

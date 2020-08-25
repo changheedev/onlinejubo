@@ -23,15 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class JuboServiceControllerTests extends WebMvcTestSupport {
 
-    private final String timetableTypeContentSample = "[" +
-            "{\\\"label\\\" : \\\"묵도\\\", \\\"value\\\" : \\\"시 65:1~4\\\"}, " +
-            "{\\\"label\\\" : \\\"찬송\\\", \\\"value\\\" : \\\"1장\\\"}, " +
-            "{\\\"label\\\" : \\\"신앙고백\\\", \\\"value\\\" : \\\"사도행전\\\"}" +
-            "]";
-
-    private final String postTypeContentSample = "<p>교회소식</p><br>" +
-            "<p><img src='https://example.com/images/test1.jpg'/></p>";
-
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)

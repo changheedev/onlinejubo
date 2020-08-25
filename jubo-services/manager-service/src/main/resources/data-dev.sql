@@ -10,6 +10,9 @@ last_modified_by, last_modified_date)
 VALUES (1, unhex(replace('dbe07414-49d1-11e6-b7a7-0242ac140002', '-', '')), '2020년 7월 5일 주보', '2020-07-05 00:00:00',
 '2020-07-11 00:00:00', 0, 'N', 1, '2020-07-04 00:00:00', 1, '2020-07-04 00:00:00');
 
+INSERT INTO oj_jubo_content (id, jubo_id, title, content)
+VALUES (1, 1, '주일 1부 예배', '[{\\\"label\\\" : \\\"묵도\\\", \\\"value\\\" : \\\"시 65:1~4\\\"}, {\\\"label\\\" : \\\"찬송\\\", \\\"value\\\" : \\\"1장\\\"}, {\\\"label\\\" : \\\"신앙고백\\\", \\\"value\\\" : \\\"사도행전\\\"}]');
+
 INSERT INTO oj_attachment (id, path, origin_name, file_type, created_by, created_date, last_modified_by,
 last_modified_date)
 VALUES (unhex(replace('a0fd7051-c82e-11ea-a901-0242ac120003', '-', '')), '/test/upload/path/testUUID1.jpg',

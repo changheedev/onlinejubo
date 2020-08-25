@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Changhee Choi
@@ -15,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @NoArgsConstructor
-public class JuboRegistrationPayload {
+public class JuboRequest {
     @NotBlank
     @Size(min = 1, max = 50)
     private String title;
@@ -23,9 +25,14 @@ public class JuboRegistrationPayload {
     @NotNull
     private LocalDateTime startDate;
 
+    @NotEmpty
+    private List<JuboContentRequest> contents;
+
     @Builder
-    public JuboRegistrationPayload(@NotBlank @Size(min = 1, max = 50) String title, @NotNull LocalDateTime startDate) {
+    public JuboRequest(@NotBlank @Size(min = 1, max = 50) String title, @NotNull LocalDateTime startDate,
+                       @NotEmpty List<JuboContentRequest> contents) {
         this.title = title;
         this.startDate = startDate;
+        this.contents = contents;
     }
 }

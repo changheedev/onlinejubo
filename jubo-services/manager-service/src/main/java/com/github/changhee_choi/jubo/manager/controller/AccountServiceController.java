@@ -1,8 +1,8 @@
 package com.github.changhee_choi.jubo.manager.controller;
 
-import com.github.changhee_choi.jubo.manager.web.payload.SignUpRequest;
-import com.github.changhee_choi.jubo.manager.service.DuplicateEmailException;
 import com.github.changhee_choi.jubo.manager.service.AccountService;
+import com.github.changhee_choi.jubo.manager.service.DuplicateEmailException;
+import com.github.changhee_choi.jubo.manager.web.payload.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,11 +32,6 @@ public class AccountServiceController {
 
         UserDetails userDetails = accountService.signUp(request);
         return ResponseEntity.ok(userDetails);
-    }
-
-    @ExceptionHandler(value = {ValidationException.class})
-    public ResponseEntity validationExceptionHandler(Exception e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(value = {DuplicateEmailException.class})
